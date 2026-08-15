@@ -1,0 +1,178 @@
+[
+  {
+    "id": "python_project_greeting",
+    "title": "Приветствие пользователя",
+    "description": "Собери воедино переменные, строки и условия.",
+    "instructions": "Напиши программу, которая спрашивает у пользователя имя, а затем выводит персональное приветствие. Если имя не введено, выведи 'Привет, незнакомец!'.",
+    "starterCode": "name = input(\"Как тебя зовут? \")\n# твой код здесь\n",
+    "solutionCode": "name = input(\"Как тебя зовут? \")\nif name:\n    print(f\"Привет, {name}!\")\nelse:\n    print(\"Привет, незнакомец!\")",
+    "requiredTopics": ["python_variables", "python_strings", "python_conditions"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Попробуй сначала создать переменную, в которой будет храниться имя пользователя.",
+      "input() возвращает строку — пустая строка тоже считается 'ложной' в условии if.",
+      "f-строки (f\"...\") — удобный способ подставить переменную внутрь текста."
+    ]
+  },
+  {
+    "id": "python_project_loops",
+    "title": "Числа от 1 до 100",
+    "description": "Практика циклов на классической задаче.",
+    "instructions": "Создай программу, которая выводит числа от 1 до 100, каждое на новой строке.",
+    "starterCode": "# твой код здесь\n",
+    "solutionCode": "for i in range(1, 101):\n    print(i)",
+    "requiredTopics": ["python_loops"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "range(1, 101) — какое число здесь исключается?",
+      "Используй цикл for вместе с range().",
+      "Не забудь print() внутри тела цикла, а не после него."
+    ]
+  },
+  {
+    "id": "js_project_greeting",
+    "title": "Функция приветствия",
+    "description": "Напиши переиспользуемую функцию.",
+    "instructions": "Напиши функцию greet(name), которая возвращает строку приветствия. Если имя не передано, верни 'Привет, незнакомец!'.",
+    "starterCode": "function greet(name) {\n  // твой код здесь\n}\n\nconsole.log(greet(\"Alex\"));",
+    "solutionCode": "function greet(name) {\n  if (!name) {\n    return \"Привет, незнакомец!\";\n  }\n  return `Привет, ${name}!`;\n}\n\nconsole.log(greet(\"Alex\"));",
+    "requiredTopics": ["js_variables", "js_functions"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Проверь параметр name в самом начале функции с помощью if.",
+      "Шаблонные строки (`...${name}...`) удобны для подстановки значений.",
+      "Не забудь return — иначе функция ничего не вернёт."
+    ]
+  },
+  {
+    "id": "js_project_arrays",
+    "title": "Статистика по массиву",
+    "description": "Обработай массив чисел без встроенных методов агрегации.",
+    "instructions": "Дан массив чисел. Напиши код, который находит сумму, максимум и минимум элементов и выводит их в консоль.",
+    "starterCode": "const numbers = [4, 8, 15, 16, 23, 42];\n// твой код здесь\n",
+    "solutionCode": "const numbers = [4, 8, 15, 16, 23, 42];\nlet sum = 0;\nlet max = numbers[0];\nlet min = numbers[0];\nfor (const n of numbers) {\n  sum += n;\n  if (n > max) max = n;\n  if (n < min) min = n;\n}\nconsole.log(\"Сумма:\", sum);\nconsole.log(\"Максимум:\", max);\nconsole.log(\"Минимум:\", min);",
+    "requiredTopics": ["js_arrays"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Заведи три переменные-накопителя до начала цикла: sum, max, min.",
+      "Цикл for...of удобен для перебора значений массива.",
+      "На каждом шаге сравнивай текущий элемент с уже найденными max и min."
+    ]
+  },
+  {
+    "id": "js_project_dom",
+    "title": "Счётчик кликов",
+    "description": "Свяжи JavaScript с элементом на странице.",
+    "instructions": "Напиши код, который находит кнопку с id 'counterBtn' и текстовый элемент с id 'count', и при каждом клике увеличивает счётчик на 1.",
+    "starterCode": "let count = 0;\n// твой код здесь\n",
+    "solutionCode": "let count = 0;\nconst button = document.getElementById(\"counterBtn\");\nconst display = document.getElementById(\"count\");\nbutton.addEventListener(\"click\", () => {\n  count++;\n  display.textContent = count;\n});",
+    "requiredTopics": ["js_dom"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Сначала найди оба элемента через getElementById.",
+      "addEventListener('click', ...) вызывает функцию при каждом клике.",
+      "Обнови textContent элемента count после увеличения счётчика."
+    ]
+  },
+  {
+    "id": "dart_project_functions",
+    "title": "Калькулятор площади",
+    "description": "Напиши функцию с типизированными параметрами.",
+    "instructions": "Напиши функцию rectangleArea(double width, double height), которая возвращает площадь прямоугольника, и выведи результат для width=4, height=5.",
+    "starterCode": "// твой код здесь\n\nvoid main() {\n  print(rectangleArea(4, 5));\n}",
+    "solutionCode": "double rectangleArea(double width, double height) {\n  return width * height;\n}\n\nvoid main() {\n  print(rectangleArea(4, 5));\n}",
+    "requiredTopics": ["dart_functions"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Тип возвращаемого значения должен быть double, как и параметры.",
+      "Площадь прямоугольника — это просто произведение сторон.",
+      "Функция должна быть объявлена вне main()."
+    ]
+  },
+  {
+    "id": "dart_project_async",
+    "title": "Загрузка профиля",
+    "description": "Смоделируй асинхронную загрузку данных.",
+    "instructions": "Напиши асинхронную функцию loadProfile(), которая имитирует задержку сети (Future.delayed на 2 секунды) и возвращает строку с именем пользователя. Дождись результата в main() и выведи его.",
+    "starterCode": "// твой код здесь\n\nvoid main() async {\n  // вызови loadProfile здесь\n}",
+    "solutionCode": "Future<String> loadProfile() async {\n  await Future.delayed(const Duration(seconds: 2));\n  return \"Alex\";\n}\n\nvoid main() async {\n  final String name = await loadProfile();\n  print(name);\n}",
+    "requiredTopics": ["dart_async"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Future.delayed(Duration(seconds: 2)) — способ имитировать задержку.",
+      "Функция должна быть помечена async и возвращать Future<String>.",
+      "В main() используй await, чтобы дождаться результата loadProfile()."
+    ]
+  },
+  {
+    "id": "cpp_project_loops",
+    "title": "Числа от 1 до 100",
+    "description": "Практика циклов и вывода в C++.",
+    "instructions": "Напиши программу, которая выводит числа от 1 до 100, каждое на новой строке.",
+    "starterCode": "#include <iostream>\n\nint main() {\n  // твой код здесь\n}",
+    "solutionCode": "#include <iostream>\n\nint main() {\n  for (int i = 1; i <= 100; i++) {\n    std::cout << i << std::endl;\n  }\n}",
+    "requiredTopics": ["cpp_loops"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Используй цикл for с условием i <= 100.",
+      "std::endl переводит строку после каждого числа.",
+      "Не забудь про фигурные скобки тела цикла."
+    ]
+  },
+  {
+    "id": "cpp_project_pointers",
+    "title": "Обмен значений через указатели",
+    "description": "Практика работы с адресами и разыменованием.",
+    "instructions": "Напиши функцию swap(int* a, int* b), которая меняет местами значения двух переменных через указатели, и выведи результат до и после вызова.",
+    "starterCode": "#include <iostream>\n\n// твой код здесь\n\nint main() {\n  int x = 1, y = 2;\n  swap(&x, &y);\n  std::cout << x << \" \" << y;\n}",
+    "solutionCode": "#include <iostream>\n\nvoid swap(int* a, int* b) {\n  int temp = *a;\n  *a = *b;\n  *b = temp;\n}\n\nint main() {\n  int x = 1, y = 2;\n  swap(&x, &y);\n  std::cout << x << \" \" << y;\n}",
+    "requiredTopics": ["cpp_pointers"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Функция должна принимать адреса переменных: swap(&x, &y).",
+      "Используй временную переменную, чтобы не потерять значение при обмене.",
+      "*a и *b обращаются к значению по адресу, а не к самому адресу."
+    ]
+  },
+  {
+    "id": "ai_project_review_prompt",
+    "title": "Промпт для анализа отзывов",
+    "description": "Спроектируй промпт с чёткой ролью и форматом.",
+    "instructions": "Напиши system и user промпт, который заставит AI анализировать отзывы пользователей и классифицировать каждый как positive/neutral/negative, возвращая результат в формате JSON.",
+    "starterCode": "System prompt:\n\nUser prompt:\n",
+    "solutionCode": "System prompt:\nТы — ассистент для анализа тональности отзывов. Всегда отвечай строго в формате JSON без лишнего текста.\n\nUser prompt:\nПроанализируй тональность каждого отзыва из списка ниже и классифицируй как \"positive\", \"neutral\" или \"negative\". Верни массив объектов вида {\"review\": ..., \"sentiment\": ...}.\n\nОтзывы:\n1. \"Отличное приложение, пользуюсь каждый день!\"\n2. \"Сойдёт, но интерфейс мог бы быть удобнее.\"\n3. \"Постоянно вылетает, очень раздражает.\"",
+    "requiredTopics": ["ai_system_user_prompts"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Раздели промпт на System (роль и правила) и User (конкретная задача).",
+      "Явно укажи желаемый формат вывода — JSON с конкретными полями.",
+      "Перечисли допустимые категории тональности, чтобы избежать разнобоя в ответах."
+    ]
+  },
+  {
+    "id": "ai_project_automation",
+    "title": "Автоматизация через API",
+    "description": "Спроектируй запрос к AI API для конкретной задачи.",
+    "instructions": "Опиши (псевдокодом или текстом), как приложение могло бы автоматически генерировать краткое резюме статьи через AI API: какой system prompt задать, какие данные передать в user prompt, и в каком формате получить ответ.",
+    "starterCode": "System prompt:\n\nUser prompt (шаблон):\n\nОжидаемый формат ответа:\n",
+    "solutionCode": "System prompt:\nТы — ассистент, который кратко и точно резюмирует статьи в 2-3 предложения на русском языке.\n\nUser prompt (шаблон):\nВот текст статьи:\n\"{article_text}\"\nСделай краткое резюме.\n\nОжидаемый формат ответа:\n{\"summary\": \"...\"}\n\nПриложение подставляет текст статьи в шаблон, отправляет запрос к API и парсит поле summary из JSON-ответа.",
+    "requiredTopics": ["ai_working_with_apis"],
+    "xpReward": 100,
+    "status": "locked",
+    "hints": [
+      "Подумай, что должно быть неизменной частью промпта (роль), а что — переменной (сам текст статьи).",
+      "Структурированный формат ответа упрощает автоматическую обработку в коде.",
+      "Хороший system prompt задаёт стиль и длину ответа заранее, чтобы не повторять это каждый раз."
+    ]
+  }
+]

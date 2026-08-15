@@ -1,0 +1,88 @@
+name: codequest
+description: "CodeQuest — gamified programming and AI learning platform."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Navigation
+  go_router: ^14.2.0
+
+  # Local database
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  path_provider: ^2.1.3
+  shared_preferences: ^2.2.3
+
+  # Networking (AI providers)
+  http: ^1.2.1
+
+  # Data / serialization
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  collection: ^1.18.0
+  uuid: ^4.4.0
+
+  # Connectivity (offline detection)
+  connectivity_plus: ^6.0.3
+
+  # UI / animation
+  flutter_animate: ^4.5.0
+  lottie: ^3.1.2
+  google_fonts: ^6.2.1
+  confetti: ^0.7.0
+
+  # Utilities
+  equatable: ^2.0.5
+  logger: ^2.4.0
+  intl: ^0.19.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # Lets sqflite run against an in-memory FFI database in `flutter test`
+  # (plain sqflite relies on platform channels that don't exist off-device).
+  sqflite_common_ffi: ^2.3.3
+
+  # Code generation
+  build_runner: ^2.4.11
+  freezed: ^2.5.5
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.3
+  custom_lint: ^0.6.4
+  riverpod_lint: ^2.3.12
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/data/courses/
+    - assets/data/fallback_lessons/
+    - assets/data/achievements/
+    - assets/images/
+
+  # Custom fonts (optional — falls back to google_fonts package at runtime
+  # if these files are not present; kept here for offline bundling).
+  # fonts:
+  #   - family: Manrope
+  #     fonts:
+  #       - asset: assets/fonts/Manrope-Regular.ttf
+  #       - asset: assets/fonts/Manrope-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Manrope-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/Manrope-Bold.ttf
+  #         weight: 700

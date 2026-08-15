@@ -1,0 +1,122 @@
+{
+  "id": "python",
+  "track": "programming",
+  "title": "Python",
+  "description": "Самый популярный язык для начала: от переменных до ООП.",
+  "iconName": "code",
+  "colorSeed": "#3B82C4",
+  "isAvailable": true,
+  "comingSoon": false,
+  "topics": [
+    {
+      "id": "python_variables",
+      "courseId": "python",
+      "title": "Variables",
+      "orderIndex": 0,
+      "iconName": "variable",
+      "lessonIds": ["python_variables_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": []
+    },
+    {
+      "id": "python_strings",
+      "courseId": "python",
+      "title": "Strings",
+      "orderIndex": 1,
+      "iconName": "text",
+      "lessonIds": ["python_strings_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_variables"]
+    },
+    {
+      "id": "python_numbers",
+      "courseId": "python",
+      "title": "Numbers",
+      "orderIndex": 2,
+      "iconName": "number",
+      "lessonIds": ["python_numbers_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_strings"]
+    },
+    {
+      "id": "python_conditions",
+      "courseId": "python",
+      "title": "Conditions",
+      "orderIndex": 3,
+      "iconName": "condition",
+      "lessonIds": ["python_conditions_l1"],
+      "miniProjectId": "python_project_greeting",
+      "prerequisiteTopicIds": ["python_numbers"]
+    },
+    {
+      "id": "python_project_greeting",
+      "courseId": "python",
+      "title": "Mini Project",
+      "orderIndex": 4,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "python_project_greeting",
+      "prerequisiteTopicIds": ["python_conditions"]
+    },
+    {
+      "id": "python_loops",
+      "courseId": "python",
+      "title": "Loops",
+      "orderIndex": 5,
+      "iconName": "loop",
+      "lessonIds": ["python_loops_l1"],
+      "miniProjectId": "python_project_loops",
+      "prerequisiteTopicIds": ["python_project_greeting"]
+    },
+    {
+      "id": "python_project_loops",
+      "courseId": "python",
+      "title": "Mini Project",
+      "orderIndex": 6,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "python_project_loops",
+      "prerequisiteTopicIds": ["python_loops"]
+    },
+    {
+      "id": "python_functions",
+      "courseId": "python",
+      "title": "Functions",
+      "orderIndex": 7,
+      "iconName": "function",
+      "lessonIds": ["python_functions_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_project_loops"]
+    },
+    {
+      "id": "python_lists",
+      "courseId": "python",
+      "title": "Lists",
+      "orderIndex": 8,
+      "iconName": "list",
+      "lessonIds": ["python_lists_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_functions"]
+    },
+    {
+      "id": "python_dictionaries",
+      "courseId": "python",
+      "title": "Dictionaries",
+      "orderIndex": 9,
+      "iconName": "dict",
+      "lessonIds": ["python_dictionaries_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_lists"]
+    },
+    {
+      "id": "python_oop",
+      "courseId": "python",
+      "title": "OOP",
+      "orderIndex": 10,
+      "iconName": "oop",
+      "lessonIds": ["python_oop_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_dictionaries"]
+    }
+  ]
+}

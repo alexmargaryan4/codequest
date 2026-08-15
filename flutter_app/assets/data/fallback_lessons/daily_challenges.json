@@ -1,0 +1,185 @@
+[
+  {
+    "dateKey": "fallback",
+    "topicId": "python_conditions",
+    "topicLabel": "Conditions",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_conditions_1",
+      "type": "findTheBug",
+      "question": "В этом коде есть ошибка — найди её.",
+      "difficulty": "medium",
+      "codeSnippet": "age = 17\nif age = 18:\n    print(\"Взрослый\")\nelse:\n    print(\"Подросток\")",
+      "options": [],
+      "matchPairs": [],
+      "correctAnswer": "age = 18",
+      "explanation": "Для сравнения нужен двойной знак равенства ==, одиночный = используется только для присваивания.",
+      "hints": [
+        "Посмотри внимательно на условие после if.",
+        "В Python сравнение и присваивание — это разные операторы."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "python_loops",
+    "topicLabel": "Loops",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_loops_1",
+      "type": "predictOutput",
+      "question": "Что выведет этот код?",
+      "difficulty": "medium",
+      "codeSnippet": "total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)",
+      "options": [],
+      "matchPairs": [],
+      "correctAnswer": "10",
+      "explanation": "range(1, 5) даёт числа 1, 2, 3, 4. Их сумма равна 10.",
+      "hints": [
+        "range(1, 5) не включает 5.",
+        "Сложи числа от 1 до 4 вручную, чтобы проверить себя."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "javascript_functions",
+    "topicLabel": "Functions",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_js_functions_1",
+      "type": "multipleChoice",
+      "question": "Какой способ правильно объявляет функцию-стрелку в JavaScript?",
+      "difficulty": "easy",
+      "codeSnippet": null,
+      "options": [
+        "const greet = (name) => `Привет, ${name}`;",
+        "function => greet(name) { return name; }",
+        "const greet = name -> `Привет, ${name}`;",
+        "arrow greet(name) => `Привет, ${name}`;"
+      ],
+      "matchPairs": [],
+      "correctAnswer": "const greet = (name) => `Привет, ${name}`;",
+      "explanation": "Стрелочная функция объявляется через (параметры) => выражение.",
+      "hints": [
+        "Стрелка в JS выглядит как =>, а не ->.",
+        "Стрелочные функции обычно присваиваются переменной через const или let."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "python_lists",
+    "topicLabel": "Lists",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_lists_1",
+      "type": "reorderLines",
+      "question": "Расставь строки кода в правильном порядке, чтобы найти максимум в списке без встроенной функции max().",
+      "difficulty": "medium",
+      "codeSnippet": null,
+      "options": [
+        "numbers = [3, 7, 2, 9, 4]",
+        "biggest = numbers[0]",
+        "for n in numbers:",
+        "    if n > biggest:",
+        "        biggest = n",
+        "print(biggest)"
+      ],
+      "matchPairs": [],
+      "correctAnswer": "numbers = [3, 7, 2, 9, 4]\nbiggest = numbers[0]\nfor n in numbers:\n    if n > biggest:\n        biggest = n\nprint(biggest)",
+      "explanation": "Сначала задаём список и начальное предположение о максимуме, затем проходим по всем элементам и обновляем biggest, если находим число больше.",
+      "hints": [
+        "Начни с создания списка — без данных сравнивать нечего.",
+        "Переменную biggest нужно инициализировать до цикла."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "dart_variables",
+    "topicLabel": "Dart Basics",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_dart_1",
+      "type": "codeCompletion",
+      "question": "Что нужно вставить, чтобы объявить неизменяемую переменную в Dart?",
+      "difficulty": "easy",
+      "codeSnippet": "____ name = \"Alex\";",
+      "options": [
+        "final",
+        "var",
+        "mutable",
+        "let"
+      ],
+      "matchPairs": [],
+      "correctAnswer": "final",
+      "explanation": "final создаёт переменную, значение которой можно установить только один раз.",
+      "hints": [
+        "В Dart нет ключевого слова let, как в JavaScript.",
+        "Ищи ключевое слово, означающее «финальный», «неизменяемый»."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "cpp_basics",
+    "topicLabel": "C++ Basics",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_cpp_1",
+      "type": "fixTheCode",
+      "question": "Исправь код так, чтобы он корректно компилировался и печатал число 5.",
+      "difficulty": "medium",
+      "codeSnippet": "#include <iostream>\n\nint main() {\n    int x = 5\n    std::cout << x << std::endl;\n    return 0;\n}",
+      "options": [],
+      "matchPairs": [],
+      "correctAnswer": "int x = 5;",
+      "explanation": "В C++ каждая инструкция должна заканчиваться точкой с запятой — после `int x = 5` её не хватает.",
+      "hints": [
+        "Компилятор C++ требует точку с запятой в конце каждой инструкции.",
+        "Посмотри на строку с объявлением переменной x."
+      ]
+    }
+  },
+  {
+    "dateKey": "fallback",
+    "topicId": "prompt_engineering_basics",
+    "topicLabel": "Prompt Engineering",
+    "xpReward": 50,
+    "isAiGenerated": false,
+    "completed": false,
+    "exercise": {
+      "id": "daily_fb_ai_1",
+      "type": "multipleChoice",
+      "question": "Какой prompt с наибольшей вероятностью даст структурированный и предсказуемый ответ от модели?",
+      "difficulty": "easy",
+      "codeSnippet": null,
+      "options": [
+        "Верни ответ в формате JSON со полями \"summary\" и \"sentiment\", без пояснений.",
+        "Расскажи мне что-нибудь про отзывы пользователей.",
+        "Отзывы. Анализ. Быстро.",
+        "Можешь как-нибудь оценить эти отзывы?"
+      ],
+      "matchPairs": [],
+      "correctAnswer": "Верни ответ в формате JSON со полями \"summary\" и \"sentiment\", без пояснений.",
+      "explanation": "Чёткий формат вывода и явные поля делают ответ модели предсказуемым и легко парсируемым — это ключевой принцип structured output.",
+      "hints": [
+        "Хороший prompt явно описывает ожидаемый формат ответа.",
+        "Расплывчатые формулировки дают расплывчатые ответы."
+      ]
+    }
+  }
+]

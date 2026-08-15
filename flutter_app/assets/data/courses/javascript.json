@@ -1,0 +1,344 @@
+[
+  {
+    "id": "js_variables_l1",
+    "title": "Variables",
+    "description": "Объявление переменных через let и const.",
+    "topicId": "js_variables",
+    "courseId": "javascript",
+    "difficulty": "beginner",
+    "orderIndex": 0,
+    "xpReward": 30,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jsv_e1",
+        "type": "multipleChoice",
+        "question": "Какое ключевое слово создаёт переменную, значение которой нельзя изменить?",
+        "difficulty": "easy",
+        "codeSnippet": null,
+        "options": ["const", "let", "var", "static"],
+        "matchPairs": [],
+        "correctAnswer": "const",
+        "explanation": "const создаёт константу — переменную, которую нельзя переприсвоить.",
+        "hints": ["Название этого слова прямо намекает на 'константа'."]
+      },
+      {
+        "id": "jsv_e2",
+        "type": "predictOutput",
+        "question": "Что выведет этот код?",
+        "difficulty": "medium",
+        "codeSnippet": "let x = 10;\nx = x + 5;\nconsole.log(x);",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "15",
+        "explanation": "let позволяет менять значение переменной, поэтому x становится 10 + 5 = 15.",
+        "hints": ["let можно переприсваивать, в отличие от const."]
+      },
+      {
+        "id": "jsv_e3",
+        "type": "findTheBug",
+        "question": "В этом коде есть ошибка. Найди строку с багом.",
+        "difficulty": "medium",
+        "codeSnippet": "const age = 20;\nage = 21;\nconsole.log(age);",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "age = 21;",
+        "explanation": "const нельзя переприсваивать после объявления — нужно было использовать let.",
+        "hints": ["Переменные, объявленные через const, нельзя менять."]
+      },
+      {
+        "id": "jsv_e4",
+        "type": "writeCode",
+        "question": "Объяви переменную city с любым городом и выведи её через console.log.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "let city = \"Yerevan\";\nconsole.log(city);",
+        "explanation": "console.log() выводит значение переменной в консоль.",
+        "hints": ["Используй console.log() вместо print()."]
+      }
+    ]
+  },
+  {
+    "id": "js_functions_l1",
+    "title": "Functions",
+    "description": "Объявление функций и стрелочные функции.",
+    "topicId": "js_functions",
+    "courseId": "javascript",
+    "difficulty": "beginner",
+    "orderIndex": 0,
+    "xpReward": 30,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jsf_e1",
+        "type": "multipleChoice",
+        "question": "Какая запись — стрелочная функция?",
+        "difficulty": "easy",
+        "codeSnippet": null,
+        "options": ["(x) => x * 2", "function x => x * 2", "def x: x * 2", "x -> x * 2"],
+        "matchPairs": [],
+        "correctAnswer": "(x) => x * 2",
+        "explanation": "Стрелочные функции в JS записываются как (параметры) => выражение.",
+        "hints": ["Ищи символ '=>' в записи."]
+      },
+      {
+        "id": "jsf_e2",
+        "type": "predictOutput",
+        "question": "Что выведет этот код?",
+        "difficulty": "medium",
+        "codeSnippet": "function square(x) {\n  return x * x;\n}\nconsole.log(square(5));",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "25",
+        "explanation": "Функция square возводит число в квадрат: 5 * 5 = 25.",
+        "hints": ["Функция возвращает x умноженное на x."]
+      },
+      {
+        "id": "jsf_e3",
+        "type": "findTheBug",
+        "question": "В этом коде функция ничего не возвращает. Найди строку с багом.",
+        "difficulty": "medium",
+        "codeSnippet": "function add(a, b) {\n  a + b;\n}\nconsole.log(add(2, 3));",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "  a + b;",
+        "explanation": "Без ключевого слова return функция ничего не возвращает.",
+        "hints": ["Нужно явно вернуть результат через return."]
+      },
+      {
+        "id": "jsf_e4",
+        "type": "writeCode",
+        "question": "Напиши функцию greet(name), которая возвращает строку 'Привет, <имя>!'.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "function greet(name) {\n  return \"Привет, \" + name + \"!\";\n}",
+        "explanation": "Функция принимает имя и возвращает собранную строку приветствия.",
+        "hints": ["Используй return и оператор + для объединения строк."]
+      }
+    ]
+  },
+  {
+    "id": "js_conditions_l1",
+    "title": "Conditions",
+    "description": "Условные конструкции if / else и тернарный оператор.",
+    "topicId": "js_conditions",
+    "courseId": "javascript",
+    "difficulty": "beginner",
+    "orderIndex": 0,
+    "xpReward": 30,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jsc_e1",
+        "type": "predictOutput",
+        "question": "Что выведет этот код?",
+        "difficulty": "medium",
+        "codeSnippet": "let age = 15;\nif (age >= 18) {\n  console.log(\"Взрослый\");\n} else {\n  console.log(\"Ребёнок\");\n}",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "Ребёнок",
+        "explanation": "15 меньше 18, поэтому выполняется ветка else.",
+        "hints": ["Проверь, выполняется ли условие age >= 18 для age = 15."]
+      },
+      {
+        "id": "jsc_e2",
+        "type": "findTheBug",
+        "question": "В этом коде есть ошибка. Найди строку с багом.",
+        "difficulty": "medium",
+        "codeSnippet": "let temp = 30;\nif (temp > 25) {\n  console.log(\"Жарко\")\n",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "if (temp > 25) {",
+        "explanation": "У открывающей фигурной скобки нет закрывающей — блок if не завершён.",
+        "hints": ["Проверь, все ли фигурные скобки закрыты."]
+      },
+      {
+        "id": "jsc_e3",
+        "type": "codeCompletion",
+        "question": "Дополни код: проверить, что number чётное.",
+        "difficulty": "medium",
+        "codeSnippet": "if (number % 2 ____ 0) {\n  console.log(\"Чётное\");\n}",
+        "options": ["===", "=", "=>", "&&"],
+        "matchPairs": [],
+        "correctAnswer": "===",
+        "explanation": "=== это оператор строгого сравнения в JavaScript.",
+        "hints": ["Одиночный = используется для присваивания, а не сравнения."]
+      },
+      {
+        "id": "jsc_e4",
+        "type": "writeCode",
+        "question": "Напиши код, который проверяет, положительное ли число x, и выводит соответствующее сообщение.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "let x = 5;\nif (x > 0) {\n  console.log(\"Положительное\");\n} else {\n  console.log(\"Не положительное\");\n}",
+        "explanation": "Простая проверка через if/else покрывает оба случая.",
+        "hints": ["Используй if (x > 0) для проверки."]
+      }
+    ]
+  },
+  {
+    "id": "js_arrays_l1",
+    "title": "Arrays",
+    "description": "Массивы и основные методы работы с ними.",
+    "topicId": "js_arrays",
+    "courseId": "javascript",
+    "difficulty": "intermediate",
+    "orderIndex": 0,
+    "xpReward": 30,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jsa_e1",
+        "type": "predictOutput",
+        "question": "Что выведет этот код?",
+        "difficulty": "medium",
+        "codeSnippet": "const fruits = [\"apple\", \"banana\", \"cherry\"];\nconsole.log(fruits[1]);",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "banana",
+        "explanation": "Индексация массивов в JS начинается с 0, поэтому fruits[1] — второй элемент.",
+        "hints": ["Индекс 0 — первый элемент."]
+      },
+      {
+        "id": "jsa_e2",
+        "type": "codeCompletion",
+        "question": "Как добавить элемент 'orange' в конец массива fruits?",
+        "difficulty": "medium",
+        "codeSnippet": "fruits.____(\"orange\");",
+        "options": ["push", "append", "add", "insert"],
+        "matchPairs": [],
+        "correctAnswer": "push",
+        "explanation": "push() добавляет элемент в конец массива в JavaScript.",
+        "hints": ["В Python это append, а в JavaScript другое слово."]
+      },
+      {
+        "id": "jsa_e3",
+        "type": "findTheBug",
+        "question": "В этом коде есть ошибка. Найди строку с багом.",
+        "difficulty": "medium",
+        "codeSnippet": "const numbers = [1, 2, 3];\nconsole.log(numbers[3]);",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "console.log(numbers[3]);",
+        "explanation": "У массива из 3 элементов индексы 0, 1, 2 — индекса 3 не существует.",
+        "hints": ["Индексы массива из 3 элементов идут от 0 до 2."]
+      },
+      {
+        "id": "jsa_e4",
+        "type": "writeCode",
+        "question": "Напиши код, который создаёт массив из трёх чисел и выводит его длину.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "const numbers = [1, 2, 3];\nconsole.log(numbers.length);",
+        "explanation": "Свойство length возвращает количество элементов массива.",
+        "hints": ["У массивов в JS есть свойство length."]
+      }
+    ]
+  },
+  {
+    "id": "js_objects_l1",
+    "title": "Objects",
+    "description": "Объекты: пары ключ-значение в JavaScript.",
+    "topicId": "js_objects",
+    "courseId": "javascript",
+    "difficulty": "intermediate",
+    "orderIndex": 0,
+    "xpReward": 30,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jso_e1",
+        "type": "predictOutput",
+        "question": "Что выведет этот код?",
+        "difficulty": "medium",
+        "codeSnippet": "const user = { name: \"Alex\", age: 25 };\nconsole.log(user.age);",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "25",
+        "explanation": "Обращение через точку user.age возвращает значение свойства age.",
+        "hints": ["К свойствам объекта можно обращаться через точку."]
+      },
+      {
+        "id": "jso_e2",
+        "type": "multipleChoice",
+        "question": "Как создать пустой объект в JavaScript?",
+        "difficulty": "easy",
+        "codeSnippet": null,
+        "options": ["{}", "[]", "()", "new Object[]"],
+        "matchPairs": [],
+        "correctAnswer": "{}",
+        "explanation": "Фигурные скобки создают объект, квадратные — массив.",
+        "hints": ["Это самый короткий и распространённый способ."]
+      },
+      {
+        "id": "jso_e3",
+        "type": "writeCode",
+        "question": "Создай объект person с полями name и age и выведи оба значения.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "const person = { name: \"Alex\", age: 25 };\nconsole.log(person.name);\nconsole.log(person.age);",
+        "explanation": "Каждое свойство объекта доступно отдельно через точечную нотацию.",
+        "hints": ["Обратись к каждому свойству через точку."]
+      }
+    ]
+  },
+  {
+    "id": "js_dom_l1",
+    "title": "DOM",
+    "description": "Основы работы с DOM: выбор и изменение элементов страницы.",
+    "topicId": "js_dom",
+    "courseId": "javascript",
+    "difficulty": "advanced",
+    "orderIndex": 0,
+    "xpReward": 35,
+    "isAiGenerated": false,
+    "exercises": [
+      {
+        "id": "jsd_e1",
+        "type": "multipleChoice",
+        "question": "Какой метод находит элемент по его id?",
+        "difficulty": "easy",
+        "codeSnippet": null,
+        "options": ["document.getElementById", "document.findById", "document.selectId", "document.queryId"],
+        "matchPairs": [],
+        "correctAnswer": "document.getElementById",
+        "explanation": "getElementById — классический способ найти элемент по атрибуту id.",
+        "hints": ["Название метода буквально описывает, что он делает."]
+      },
+      {
+        "id": "jsd_e2",
+        "type": "predictOutput",
+        "question": "Что произойдёт при выполнении этого кода, если на странице есть <p id=\"msg\">Hello</p>?",
+        "difficulty": "medium",
+        "codeSnippet": "document.getElementById(\"msg\").textContent = \"Привет\";",
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "Текст элемента изменится на Привет",
+        "explanation": "textContent заменяет текстовое содержимое найденного элемента.",
+        "hints": ["textContent — это свойство, которое можно перезаписать."]
+      },
+      {
+        "id": "jsd_e3",
+        "type": "writeCode",
+        "question": "Напиши код, который находит элемент с id 'title' и меняет его текст на 'CodeQuest'.",
+        "difficulty": "hard",
+        "codeSnippet": null,
+        "options": [],
+        "matchPairs": [],
+        "correctAnswer": "document.getElementById(\"title\").textContent = \"CodeQuest\";",
+        "explanation": "Сначала находим элемент, затем присваиваем новое значение textContent.",
+        "hints": ["Сначала getElementById, затем присвой textContent."]
+      }
+    ]
+  }
+]
