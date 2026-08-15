@@ -45,6 +45,14 @@ class LessonRepository {
   /// avoid re-reading/re-parsing the asset JSON on every lesson request.
   final Map<String, List<Lesson>> _fallbackCache = <String, List<Lesson>>{};
 
+  /// The canonical lesson id for a topic's (currently, only) lesson.
+  /// Course maps (assets/data/courses/*.json) hardcode this exact pattern
+  /// in each topic's `lessonIds`, e.g. topic "python_variables" ->
+  /// lesson "python_variables_l1". Every lesson this repository hands
+  /// out — AI-generated, bundled fallback, or cached — is force-stamped
+  /// with this id so it always matches what the course map expects.
+  String _canonicalLessonId(String topicId) => '${topicId}_l1';
+
   Future<Lesson> getLesson({
     required String courseId,
     required String courseTitle,
@@ -58,7 +66,11 @@ class LessonRepository {
       final Lesson? cached = await _readFromCache(topicId);
       if (cached != null) {
         _logger.i('Lesson "$topicId" served from cache');
-        return cached;
+        // Old cache rows written before the canonical-id fix (or by a
+        // stray AI id that slipped through) may still carry a mismatched
+        // id. Re-stamping on read heals those in place without needing a
+        // migration or a cache wipe.
+        return _withCanonicalId(cached, topicId);
       }
     }
 
@@ -78,17 +90,47 @@ class LessonRepository {
         strugglingTopics: plan.reinforceTopics,
         masteredTopics: plan.skipBasicsFor,
       );
-      await _writeToCache(generated);
-      return generated;
+      // The AI is only asked for "a unique slug" and has no idea what id
+      // the course map (assets/data/courses/*.json) actually expects for
+      // this topic. If we kept the model's own id, ProgressService's
+      // "every lessonId in this topic is in completedLessonIds" check
+      // would never match, the topic would never be marked completed,
+      // and the next topic would stay locked forever even though the
+      // lesson itself shows as finished. Stamping the canonical id here
+      // — the single choke point every lesson passes through — fixes
+      // that regardless of which source produced the lesson.
+      final Lesson stamped = _withCanonicalId(generated, topicId);
+      await _writeToCache(stamped);
+      return stamped;
     } catch (e) {
       _logger.w('AI lesson generation unavailable for "$topicId" ($e), using bundled fallback');
       final Lesson? fallback = await _readBundledFallback(courseId: courseId, topicId: topicId);
       if (fallback != null) {
-        await _writeToCache(fallback);
-        return fallback;
+        final Lesson stamped = _withCanonicalId(fallback, topicId);
+        await _writeToCache(stamped);
+        return stamped;
       }
       rethrow;
     }
+  }
+
+  Lesson _withCanonicalId(Lesson lesson, String topicId) {
+    final String canonicalId = _canonicalLessonId(topicId);
+    if (lesson.id == canonicalId) return lesson;
+    return Lesson(
+      id: canonicalId,
+      title: lesson.title,
+      description: lesson.description,
+      topicId: lesson.topicId,
+      courseId: lesson.courseId,
+      difficulty: lesson.difficulty,
+      exercises: lesson.exercises,
+      status: lesson.status,
+      orderIndex: lesson.orderIndex,
+      xpReward: lesson.xpReward,
+      isAiGenerated: lesson.isAiGenerated,
+      generatedAt: lesson.generatedAt,
+    );
   }
 
   Future<Lesson?> _readFromCache(String topicId) async {
