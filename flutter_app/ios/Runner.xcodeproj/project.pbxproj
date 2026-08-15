@@ -91,7 +91,7 @@
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
 			);
-			name = Flutter;
+			path = Flutter;
 			sourceTree = "<group>";
 		};
 		97C146E51CF9000F007C117D = {
