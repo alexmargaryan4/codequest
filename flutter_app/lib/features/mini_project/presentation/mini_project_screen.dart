@@ -19,7 +19,7 @@ import '../../exercises/presentation/widgets/exercise_common.dart';
 /// like lessons) since they're meant to be the same fixed 5-20 minute
 /// task described in the product spec, so a simple bundled-asset lookup
 /// is sufficient — no AI/cache path needed here.
-final FutureProvider.family<MiniProject?, String> miniProjectProvider =
+final FutureProviderFamily<MiniProject?, String> miniProjectProvider =
     FutureProvider.family<MiniProject?, String>((Ref ref, String projectId) async {
   try {
     final String raw = await rootBundle.loadString('assets/data/fallback_lessons/mini_projects.json');

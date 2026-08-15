@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../../models/exercise.dart';
 import '../../../models/lesson.dart';
-import '../../../models/user_progress.dart';
 import '../../../core/constants/xp_constants.dart';
 
 /// Immutable snapshot of where the user is within a single lesson

@@ -117,7 +117,7 @@ class HomeScreen extends ConsumerWidget {
                   sliver: SliverToBoxAdapter(
                     child: courseAsync.when(
                       loading: () => const _MapPreviewSkeleton(),
-                      error: (Object e, StackTrace st) => Text('Не удалось загрузить курс'),
+                      error: (Object e, StackTrace st) => const Text('Не удалось загрузить курс'),
                       data: (Course? course) {
                         if (course == null) {
                           return _EmptyStateCard(semantic: semantic, text: text);

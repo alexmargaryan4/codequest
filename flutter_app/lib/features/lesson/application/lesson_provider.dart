@@ -29,7 +29,7 @@ class LessonRequest {
 /// [LessonRepository] (cache → AI → bundled fallback per the product
 /// spec) with the course title and topic title looked up from the
 /// course map so the AI prompt has real context.
-final FutureProvider.family<Lesson, LessonRequest> lessonProvider =
+final FutureProviderFamily<Lesson, LessonRequest> lessonProvider =
     FutureProvider.family<Lesson, LessonRequest>((Ref ref, LessonRequest request) async {
   final CourseRepository courseRepo = ref.watch(courseRepositoryProvider);
   final Course? course = await courseRepo.getCourse(request.courseId);

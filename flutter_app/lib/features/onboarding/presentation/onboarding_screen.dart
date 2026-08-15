@@ -65,7 +65,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme text = Theme.of(context).textTheme;
     final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
     final bool isLastPage = _page == _slides.length;
 
@@ -191,7 +190,7 @@ class _NamePromptView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Icon(Icons.badge_rounded, size: 44, color: AppColors.accentIndigo),
+          const Icon(Icons.badge_rounded, size: 44, color: AppColors.accentIndigo),
           const SizedBox(height: 24),
           Text('Как тебя зовут?', style: text.headlineMedium, textAlign: TextAlign.center),
           const SizedBox(height: 8),

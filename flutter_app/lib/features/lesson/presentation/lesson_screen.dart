@@ -284,7 +284,6 @@ class _DifficultyTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
     final TextTheme text = Theme.of(context).textTheme;
     final String label = switch (difficulty) {
       ExerciseDifficulty.easy => 'Легко',

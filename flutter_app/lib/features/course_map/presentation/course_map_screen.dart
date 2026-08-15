@@ -14,7 +14,7 @@ import '../../../shared/widgets/topic_node_widget.dart';
 
 /// Resolves a [Course] (with live topic statuses) for a given courseId,
 /// re-computed whenever [userProgressProvider] changes.
-final FutureProvider.family<Course?, String> resolvedCourseProvider =
+final FutureProviderFamily<Course?, String> resolvedCourseProvider =
     FutureProvider.family<Course?, String>((Ref ref, String courseId) async {
   final UserProgress? progress = ref.watch(userProgressProvider).valueOrNull;
   if (progress == null) return null;

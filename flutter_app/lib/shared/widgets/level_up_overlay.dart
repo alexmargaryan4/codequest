@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_theme.dart';
 
 /// Full-screen celebratory overlay shown when the user levels up.
 /// Lightweight confetti burst + scale-in badge; dismissible by tapping
