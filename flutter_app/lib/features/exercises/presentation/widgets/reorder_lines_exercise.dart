@@ -29,7 +29,7 @@ class ReorderLinesExercise extends StatefulWidget {
 }
 
 class _ReorderLinesExerciseState extends State<ReorderLinesExercise> {
-  final List<String> _order = List<String>.from(widget.exercise.options);
+  late final List<String> _order = List<String>.from(widget.exercise.options);
 
   @override
   Widget build(BuildContext context) {

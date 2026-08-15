@@ -53,9 +53,9 @@ class XpProgressBar extends StatelessWidget {
                 duration: const Duration(milliseconds: 700),
                 curve: Curves.easeOutCubic,
                 builder: (BuildContext context, double value, Widget? child) {
-                  return DecoratedBox(
+                  return const DecoratedBox(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: <Color>[
                           AppColors.accentIndigoMuted,
                           AppColors.accentIndigo,

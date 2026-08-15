@@ -6,12 +6,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/core_providers.dart';
 import '../../../core/providers/progress_provider.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../models/mini_project.dart';
-import '../../../shared/widgets/level_up_overlay.dart';
 import '../../exercises/presentation/widgets/exercise_common.dart';
 
 /// Loads a [MiniProject] by id from the bundled per-course project data.
