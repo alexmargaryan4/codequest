@@ -77,6 +77,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Object? _selection;
   bool _answered = false;
+  bool _wasCorrect = false;
   int? _pendingLevelUp;
 
   @override
@@ -85,6 +86,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
     if (oldWidget.challenge.dateKey != widget.challenge.dateKey) {
       _selection = null;
       _answered = false;
+      _wasCorrect = false;
     }
   }
 
@@ -128,8 +130,10 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 selection: _selection,
                 onSelectionChanged: (Object? v) => setState(() => _selection = v),
                 onSubmit: () {
+                  final bool correct = ExerciseWidgetFactory.isCorrect(exercise, _selection);
                   setState(() {
                     _answered = true;
+                    _wasCorrect = correct;
                   });
                 },
               ),
@@ -143,11 +147,17 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             bottom: 16,
             child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _claimReward(context),
-                icon: const Icon(Icons.bolt_rounded),
-                label: Text('Забрать +${widget.challenge.xpReward} XP'),
-              ),
+              child: _wasCorrect
+                  ? ElevatedButton.icon(
+                      onPressed: () => _claimReward(context),
+                      icon: const Icon(Icons.bolt_rounded),
+                      label: Text('Забрать +${widget.challenge.xpReward} XP'),
+                    )
+                  : ElevatedButton.icon(
+                      onPressed: _tryAgain,
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: const Text('Попробовать снова'),
+                    ),
             ).animate().fadeIn().slideY(begin: 0.2, end: 0),
           ),
         if (_pendingLevelUp != null)
@@ -157,6 +167,17 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
           ),
       ],
     );
+  }
+
+  /// Lets the user retry after an incorrect answer instead of silently
+  /// unlocking the reward. The exercise resets to unanswered so the
+  /// options become tappable again.
+  void _tryAgain() {
+    setState(() {
+      _selection = null;
+      _answered = false;
+      _wasCorrect = false;
+    });
   }
 
   Future<void> _claimReward(BuildContext context) async {
