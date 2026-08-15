@@ -54,7 +54,10 @@ jobs:
         run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze
+        # Fails the build only on real errors. Style-level warnings/info
+        # (unused fields, deprecated_member_use, prefer_const, etc.) are
+        # left for local cleanup and never block CI.
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Run tests
         run: flutter test

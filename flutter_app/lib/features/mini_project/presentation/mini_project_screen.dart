@@ -100,11 +100,9 @@ class _MiniProjectScreenState extends ConsumerState<MiniProjectScreen> {
   Future<void> _complete(MiniProject project) async {
     final notifier = ref.read(userProgressProvider.notifier);
     await notifier.completeMiniProject(projectId: project.id, topicId: widget.topicId);
-    final ProgressEvent? event = notifier.lastEvent;
     notifier.clearEvent();
     setState(() {
       _submitted = true;
-      if (event?.leveledUp == true) _pendingLevelUp = event!.newLevel;
     });
   }
 }

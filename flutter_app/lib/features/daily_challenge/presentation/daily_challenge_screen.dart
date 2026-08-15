@@ -77,7 +77,6 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Object? _selection;
   bool _answered = false;
-  bool _correct = false;
   int? _pendingLevelUp;
 
   @override
@@ -129,10 +128,8 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 selection: _selection,
                 onSelectionChanged: (Object? v) => setState(() => _selection = v),
                 onSubmit: () {
-                  final bool correct = ExerciseWidgetFactory.isCorrect(exercise, _selection);
                   setState(() {
                     _answered = true;
-                    _correct = correct;
                   });
                 },
               ),
