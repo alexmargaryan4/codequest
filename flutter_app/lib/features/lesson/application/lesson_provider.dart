@@ -40,8 +40,19 @@ final FutureProviderFamily<Lesson, LessonRequest> lessonProvider =
           .firstOrNull ??
       request.topicId;
 
+  // Intentionally `ref.read`, not `ref.watch`: this provider must resolve
+  // once per lesson attempt and then stay stable for the lifetime of that
+  // attempt. Completing the lesson updates userProgressProvider (XP,
+  // completedLessonIds, streak...); if we watched it here, that update
+  // would rebuild this FutureProvider mid-completion, hand LessonScreen a
+  // brand-new Lesson instance, and — since lessonSessionProvider is keyed
+  // by that Lesson object's identity — silently spin up a fresh session
+  // with exerciseIndex back at 0. That's what made a just-finished lesson
+  // appear to "restart" instead of showing the completion screen. Reading
+  // the progress snapshot here (for adaptive difficulty) doesn't need a
+  // live subscription — it's only used the moment the lesson is built.
   final UserProgress progress =
-      ref.watch(userProgressProvider).valueOrNull ?? const UserProgress();
+      ref.read(userProgressProvider).valueOrNull ?? const UserProgress();
 
   return ref.watch(lessonRepositoryProvider).getLesson(
         courseId: request.courseId,

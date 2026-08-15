@@ -152,4 +152,16 @@ class Lesson {
   }
 
   bool get isValid => validate().isEmpty;
+
+  /// Value equality keyed on [id]. lessonSessionProvider is a
+  /// StateNotifierProvider.family keyed by a Lesson instance — without
+  /// this override, two Lesson objects loaded for the same lesson id (e.g.
+  /// after lessonProvider is re-read) would compare unequal by identity
+  /// and silently spin up a second, fresh session instead of reusing the
+  /// in-progress one.
+  @override
+  bool operator ==(Object other) => other is Lesson && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
