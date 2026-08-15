@@ -46,9 +46,20 @@ class _PredictOutputExerciseState extends State<PredictOutputExercise> {
   Widget build(BuildContext context) {
     final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
     final TextTheme text = Theme.of(context).textTheme;
-    final String expected = (widget.exercise.correctAnswer ?? '').trim();
+    // Line-by-line, case-insensitive — must match
+    // ExerciseWidgetFactory.isCorrect exactly, or this banner can
+    // disagree with the actual graded result.
+    final List<String> expectedLines = (widget.exercise.correctAnswer ?? '')
+        .split('\n')
+        .map((String l) => l.trim().toLowerCase())
+        .toList();
+    final List<String> selectedLines =
+        (widget.selected ?? '').split('\n').map((String l) => l.trim().toLowerCase()).toList();
     final bool wasCorrect = widget.answered &&
-        (widget.selected ?? '').trim().toLowerCase() == expected.toLowerCase();
+        expectedLines.length == selectedLines.length &&
+        List<int>.generate(expectedLines.length, (int i) => i)
+            .every((int i) => expectedLines[i] == selectedLines[i]);
+    final String expected = (widget.exercise.correctAnswer ?? '').trim();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,8 +72,12 @@ class _PredictOutputExerciseState extends State<PredictOutputExercise> {
         const SizedBox(height: 10),
         if (_hasOptions)
           ...widget.exercise.options.map((String option) {
-            final bool isSelected = option == widget.selected;
-            final bool isCorrectOption = option == widget.exercise.correctAnswer;
+            // Trim (and match wasCorrect's case-insensitivity) so this
+            // highlight never disagrees with the actual graded result
+            // above — see ExerciseWidgetFactory.isCorrect.
+            final bool isSelected =
+                option.trim().toLowerCase() == (widget.selected ?? '').trim().toLowerCase();
+            final bool isCorrectOption = option.trim().toLowerCase() == expected.toLowerCase();
             Color borderColor = semantic.border;
             Color bgColor = semantic.surfaceRaised;
             double borderWidth = 1;
@@ -103,6 +118,13 @@ class _PredictOutputExerciseState extends State<PredictOutputExercise> {
             controller: _controller,
             enabled: !widget.answered,
             onChanged: widget.onSelectionChanged,
+            // Some expected outputs span multiple lines (e.g. a loop that
+            // prints one value per line). A default single-line TextField
+            // can't produce a '\n' at all, so a multi-line correct answer
+            // would have been impossible to type — not just hard to match.
+            maxLines: null,
+            minLines: 1,
+            keyboardType: TextInputType.multiline,
             style: const TextStyle(fontFamily: 'monospace'),
             decoration: const InputDecoration(
               hintText: 'Введи ожидаемый вывод',

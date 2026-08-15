@@ -35,8 +35,18 @@ class _ReorderLinesExerciseState extends State<ReorderLinesExercise> {
   Widget build(BuildContext context) {
     final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
     final TextTheme text = Theme.of(context).textTheme;
-    final List<String> correctOrder = (widget.exercise.correctAnswer ?? '').split('\n');
-    final bool wasCorrect = widget.answered && _order.join('\n') == correctOrder.join('\n');
+    // Trim each line individually before comparing — see
+    // ExerciseWidgetFactory.isCorrect. Comparing the whole joined string
+    // only strips the outer edges, so per-line indentation differences
+    // from AI-generated content could still make a correct order compare
+    // unequal.
+    final List<String> correctOrder =
+        (widget.exercise.correctAnswer ?? '').split('\n').map((String l) => l.trim()).toList();
+    final List<String> currentOrder = _order.map((String l) => l.trim()).toList();
+    final bool wasCorrect = widget.answered &&
+        currentOrder.length == correctOrder.length &&
+        List<int>.generate(currentOrder.length, (int i) => i)
+            .every((int i) => currentOrder[i] == correctOrder[i]);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,7 +74,8 @@ class _ReorderLinesExerciseState extends State<ReorderLinesExercise> {
           },
           itemBuilder: (BuildContext context, int i) {
             final String line = _order[i];
-            final bool lineCorrectPosition = widget.answered && i < correctOrder.length && line == correctOrder[i];
+            final bool lineCorrectPosition =
+                widget.answered && i < correctOrder.length && line.trim() == correctOrder[i];
             return Container(
               key: ValueKey<String>('$line-$i'),
               margin: const EdgeInsets.only(bottom: 8),

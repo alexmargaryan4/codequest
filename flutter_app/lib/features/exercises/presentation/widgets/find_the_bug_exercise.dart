@@ -29,7 +29,14 @@ class FindTheBugExercise extends StatelessWidget {
     final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
     final TextTheme text = Theme.of(context).textTheme;
     final List<String> lines = (exercise.codeSnippet ?? '').split('\n');
-    final bool wasCorrect = answered && selected == exercise.correctAnswer;
+    // Trim before comparing: AI-generated `correctAnswer` can carry
+    // slightly different leading/trailing whitespace than the matching
+    // line in `codeSnippet` (e.g. indentation) without that being a real
+    // mismatch. This must match ExerciseWidgetFactory.isCorrect exactly,
+    // or the result banner can disagree with the green/red highlight
+    // below — which is what made a correct tap look "wrong".
+    final bool wasCorrect =
+        answered && (selected ?? '').trim() == (exercise.correctAnswer ?? '').trim();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

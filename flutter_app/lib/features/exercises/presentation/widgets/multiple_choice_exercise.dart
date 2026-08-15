@@ -42,8 +42,13 @@ class MultipleChoiceExercise extends StatelessWidget {
         ],
         const SizedBox(height: 20),
         ...exercise.options.map((String option) {
-          final bool isSelected = option == selected;
-          final bool isCorrectOption = option == exercise.correctAnswer;
+          // Trim before comparing — see ExerciseWidgetFactory.isCorrect for
+          // why: AI-generated correctAnswer/options can carry incidental
+          // whitespace differences. Keeping this in sync with isCorrect
+          // avoids the option highlighting disagreeing with the actual
+          // right/wrong result shown after submit.
+          final bool isSelected = option.trim() == (selected ?? '').trim();
+          final bool isCorrectOption = option.trim() == (exercise.correctAnswer ?? '').trim();
 
           Color borderColor = semantic.border;
           Color bgColor = semantic.surfaceRaised;

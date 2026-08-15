@@ -82,20 +82,49 @@ class ExerciseWidgetFactory {
   /// submit — they're self-assessed or completion-graded rather than
   /// strictly matched, since there's no single right answer to compare
   /// against.
+  ///
+  /// All string comparisons below trim whitespace (and lowercase where
+  /// case isn't meaningful) before comparing. AI-generated content in
+  /// particular can differ from the option/line text by incidental
+  /// leading/trailing whitespace or indentation without that difference
+  /// being a real wrong answer — an exact `==` there was marking genuinely
+  /// correct taps as wrong.
   static bool isCorrect(Exercise exercise, Object? selection) {
     switch (exercise.type) {
       case ExerciseType.multipleChoice:
       case ExerciseType.codeCompletion:
-      case ExerciseType.findTheBug:
-        return selection == exercise.correctAnswer;
-      case ExerciseType.predictOutput:
-        final String expected = (exercise.correctAnswer ?? '').trim().toLowerCase();
-        final String actual = (selection as String? ?? '').trim().toLowerCase();
-        return expected == actual;
-      case ExerciseType.reorderLines:
         final String expected = (exercise.correctAnswer ?? '').trim();
         final String actual = (selection as String? ?? '').trim();
-        return expected == actual;
+        return expected.isNotEmpty && expected == actual;
+      case ExerciseType.findTheBug:
+        final String expected = (exercise.correctAnswer ?? '').trim();
+        final String actual = (selection as String? ?? '').trim();
+        return expected.isNotEmpty && expected == actual;
+      case ExerciseType.predictOutput:
+        // Line-by-line so a multi-line expected output (e.g. one value
+        // per loop iteration) isn't broken by a stray trailing space on
+        // just one line while the rest of the answer is exactly right.
+        final List<String> expectedOutLines = (exercise.correctAnswer ?? '')
+            .split('\n')
+            .map((String l) => l.trim().toLowerCase())
+            .toList();
+        final List<String> actualOutLines = (selection as String? ?? '')
+            .split('\n')
+            .map((String l) => l.trim().toLowerCase())
+            .toList();
+        return expectedOutLines.length == actualOutLines.length &&
+            List.generate(expectedOutLines.length, (int i) => i)
+                .every((int i) => expectedOutLines[i] == actualOutLines[i]);
+      case ExerciseType.reorderLines:
+        final List<String> expectedLines = (exercise.correctAnswer ?? '')
+            .split('\n')
+            .map((String l) => l.trim())
+            .toList();
+        final List<String> actualLines =
+            (selection as String? ?? '').split('\n').map((String l) => l.trim()).toList();
+        return expectedLines.length == actualLines.length &&
+            List.generate(expectedLines.length, (int i) => i)
+                .every((int i) => expectedLines[i] == actualLines[i]);
       case ExerciseType.matchPairs:
       case ExerciseType.writeCode:
       case ExerciseType.fixTheCode:

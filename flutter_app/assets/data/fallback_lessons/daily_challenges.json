@@ -14,7 +14,7 @@
       "codeSnippet": "age = 17\nif age = 18:\n    print(\"Взрослый\")\nelse:\n    print(\"Подросток\")",
       "options": [],
       "matchPairs": [],
-      "correctAnswer": "age = 18",
+      "correctAnswer": "if age = 18:",
       "explanation": "Для сравнения нужен двойной знак равенства ==, одиночный = используется только для присваивания.",
       "hints": [
         "Посмотри внимательно на условие после if.",

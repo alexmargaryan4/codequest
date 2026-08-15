@@ -1,667 +1,122 @@
-[
-  {
-    "id": "python_variables_l1",
-    "title": "Variables",
-    "description": "Учимся создавать переменные и хранить в них данные.",
-    "topicId": "python_variables",
-    "courseId": "python",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pv_e1",
-        "type": "multipleChoice",
-        "question": "Какая строка правильно создаёт переменную name со значением \"Alex\"?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["name = \"Alex\"", "name == \"Alex\"", "var name = \"Alex\"", "\"name\" = Alex"],
-        "matchPairs": [],
-        "correctAnswer": "name = \"Alex\"",
-        "explanation": "В Python переменная создаётся простым присваиванием через один знак =.",
-        "hints": ["В Python не нужно писать var или let перед именем переменной.", "Используй один знак равенства для присваивания."]
-      },
-      {
-        "id": "pv_e2",
-        "type": "codeCompletion",
-        "question": "Что нужно вставить, чтобы вывести значение переменной name?",
-        "difficulty": "easy",
-        "codeSnippet": "name = \"Alex\"\nprint(____)",
-        "options": ["name", "\"name\"", "Alex", "None"],
-        "matchPairs": [],
-        "correctAnswer": "name",
-        "explanation": "print(name) выводит значение переменной, а не её имя в кавычках.",
-        "hints": ["Кавычки вокруг name превратят это в обычный текст, а не значение переменной."]
-      },
-      {
-        "id": "pv_e3",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "x = 5\nx = x + 1\nprint(x)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "6",
-        "explanation": "Переменная x сначала равна 5, затем перезаписывается значением 5 + 1 = 6.",
-        "hints": ["Переменные можно перезаписывать новым значением.", "Посчитай x + 1, где x = 5."]
-      },
-      {
-        "id": "pv_e4",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "age = 25\nprint(Age)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "print(Age)",
-        "explanation": "Python чувствителен к регистру: переменная называется age, а не Age.",
-        "hints": ["Python различает заглавные и строчные буквы в именах переменных."]
-      },
-      {
-        "id": "pv_e5",
-        "type": "writeCode",
-        "question": "Напиши код, который создаёт переменную city со значением твоего любимого города и выводит её на экран.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "city = \"Yerevan\"\nprint(city)",
-        "explanation": "Главное — создать переменную и вывести её через print().",
-        "hints": ["Сначала присвой значение переменной city.", "Затем используй print(city), чтобы вывести его."]
-      }
-    ]
-  },
-  {
-    "id": "python_strings_l1",
-    "title": "Strings",
-    "description": "Работа со строками: конкатенация, длина, методы.",
-    "topicId": "python_strings",
-    "courseId": "python",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "ps_e1",
-        "type": "multipleChoice",
-        "question": "Как объединить две строки в Python?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["\"a\" + \"b\"", "\"a\" & \"b\"", "\"a\" . \"b\"", "concat(\"a\", \"b\")"],
-        "matchPairs": [],
-        "correctAnswer": "\"a\" + \"b\"",
-        "explanation": "Оператор + объединяет (конкатенирует) строки в Python.",
-        "hints": ["В Python строки объединяются тем же оператором, что и числа складываются."]
-      },
-      {
-        "id": "ps_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "name = \"Alex\"\nprint(\"Привет, \" + name + \"!\")",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Привет, Alex!",
-        "explanation": "Строки соединяются в том порядке, в котором записаны через +.",
-        "hints": ["Просто соедини все три части по порядку."]
-      },
-      {
-        "id": "ps_e3",
-        "type": "codeCompletion",
-        "question": "Как получить длину строки text?",
-        "difficulty": "easy",
-        "codeSnippet": "text = \"hello\"\nprint(____)",
-        "options": ["len(text)", "text.length", "length(text)", "text.len()"],
-        "matchPairs": [],
-        "correctAnswer": "len(text)",
-        "explanation": "В Python длина строки вычисляется встроенной функцией len().",
-        "hints": ["Это не метод строки, а отдельная встроенная функция."]
-      },
-      {
-        "id": "ps_e4",
-        "type": "matchPairs",
-        "question": "Сопоставь метод строки с его действием.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [
-          {"left": ".upper()", "right": "Переводит строку в верхний регистр"},
-          {"left": ".lower()", "right": "Переводит строку в нижний регистр"},
-          {"left": ".strip()", "right": "Убирает пробелы по краям"}
-        ],
-        "correctAnswer": null,
-        "explanation": "Эти методы часто используются для очистки и форматирования пользовательского ввода.",
-        "hints": ["Названия методов говорят сами за себя, если перевести их на русский."]
-      },
-      {
-        "id": "ps_e5",
-        "type": "writeCode",
-        "question": "Напиши код, который просит имя пользователя через input() и выводит приветствие с этим именем.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "name = input(\"Как тебя зовут? \")\nprint(\"Привет, \" + name + \"!\")",
-        "explanation": "input() возвращает строку, которую можно сразу использовать в конкатенации.",
-        "hints": ["Функция input() возвращает то, что ввёл пользователь, как строку.", "Сохрани результат input() в переменную и затем выведи её вместе с приветствием."]
-      }
-    ]
-  },
-  {
-    "id": "python_numbers_l1",
-    "title": "Numbers",
-    "description": "Целые числа, дробные числа и арифметические операции.",
-    "topicId": "python_numbers",
-    "courseId": "python",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pn_e1",
-        "type": "multipleChoice",
-        "question": "Что выведет print(10 // 3)?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["3", "3.33", "1", "10"],
-        "matchPairs": [],
-        "correctAnswer": "3",
-        "explanation": "// — целочисленное деление, оно отбрасывает дробную часть.",
-        "hints": ["Двойной слэш выполняет деление без остатка, отбрасывая дробную часть."]
-      },
-      {
-        "id": "pn_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "a = 7\nb = 2\nprint(a % b)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "1",
-        "explanation": "% возвращает остаток от деления: 7 делится на 2 с остатком 1.",
-        "hints": ["% — это оператор остатка от деления."]
-      },
-      {
-        "id": "pn_e3",
-        "type": "reorderLines",
-        "question": "Расставь строки так, чтобы код вычислил и вывел среднее двух чисел.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": ["print(average)", "average = (a + b) / 2", "a = 4\nb = 8"],
-        "matchPairs": [],
-        "correctAnswer": "a = 4\nb = 8\naverage = (a + b) / 2\nprint(average)",
-        "explanation": "Сначала объявляем переменные, затем вычисляем результат, затем выводим его.",
-        "hints": ["Сначала должны быть объявлены переменные, которые используются в вычислении."]
-      },
-      {
-        "id": "pn_e4",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "price = 100\ndiscount = 0.2\nfinal_price = price - price * discount\nprint(final price)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "print(final price)",
-        "explanation": "Имя переменной не может содержать пробел — нужно final_price.",
-        "hints": ["Имена переменных в Python не могут содержать пробелы."]
-      },
-      {
-        "id": "pn_e5",
-        "type": "writeCode",
-        "question": "Напиши код, который вычисляет площадь прямоугольника со сторонами 5 и 8 и выводит результат.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "width = 5\nheight = 8\narea = width * height\nprint(area)",
-        "explanation": "Площадь прямоугольника — произведение сторон.",
-        "hints": ["Площадь = ширина * высота."]
-      }
-    ]
-  },
-  {
-    "id": "python_conditions_l1",
-    "title": "Conditions",
-    "description": "Условные конструкции if / elif / else.",
-    "topicId": "python_conditions",
-    "courseId": "python",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pc_e1",
-        "type": "multipleChoice",
-        "question": "Какая конструкция проверяет условие в Python?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["if", "when", "check", "switch"],
-        "matchPairs": [],
-        "correctAnswer": "if",
-        "explanation": "В Python условные проверки выполняются с помощью if / elif / else.",
-        "hints": ["Это ключевое слово используется почти во всех языках программирования для условий."]
-      },
-      {
-        "id": "pc_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "age = 16\nif age >= 18:\n    print(\"Взрослый\")\nelse:\n    print(\"Ребёнок\")",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Ребёнок",
-        "explanation": "16 меньше 18, поэтому условие if ложно и выполняется ветка else.",
-        "hints": ["Проверь, выполняется ли условие age >= 18 для age = 16."]
-      },
-      {
-        "id": "pc_e3",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "temperature = 30\nif temperature > 25\n    print(\"Жарко\")",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "if temperature > 25",
-        "explanation": "После условия if в Python обязательно нужно поставить двоеточие.",
-        "hints": ["Проверь синтаксис оператора if — после условия должен быть специальный символ."]
-      },
-      {
-        "id": "pc_e4",
-        "type": "codeCompletion",
-        "question": "Дополни код: если число чётное, вывести \"Чётное\".",
-        "difficulty": "medium",
-        "codeSnippet": "number = 4\nif number % 2 == ____:\n    print(\"Чётное\")",
-        "options": ["0", "1", "2", "number"],
-        "matchPairs": [],
-        "correctAnswer": "0",
-        "explanation": "Число чётное, если остаток от деления на 2 равен нулю.",
-        "hints": ["Чётное число делится на 2 без остатка."]
-      },
-      {
-        "id": "pc_e5",
-        "type": "writeCode",
-        "question": "Напиши программу, которая спрашивает имя пользователя и выводит приветствие.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "name = input(\"Как тебя зовут? \")\nprint(\"Привет, \" + name + \"!\")",
-        "explanation": "Это разминка перед мини-проектом — используй input() и print().",
-        "hints": ["Сохрани результат input() в переменную.", "Собери приветственную строку с помощью +."]
-      }
-    ]
-  },
-  {
-    "id": "python_loops_l1",
-    "title": "Loops",
-    "description": "Циклы for и while для повторения действий.",
-    "topicId": "python_loops",
-    "courseId": "python",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pl_e1",
-        "type": "multipleChoice",
-        "question": "Какой цикл лучше использовать, если известно точное число повторений?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["for", "while", "loop", "repeat"],
-        "matchPairs": [],
-        "correctAnswer": "for",
-        "explanation": "for обычно используется, когда известно количество итераций, например range(10).",
-        "hints": ["Этот цикл часто используют вместе с range()."]
-      },
-      {
-        "id": "pl_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "for i in range(3):\n    print(i)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "0\n1\n2",
-        "explanation": "range(3) генерирует числа 0, 1, 2 — три значения, начиная с нуля.",
-        "hints": ["range(3) начинается с 0 и не включает само число 3."]
-      },
-      {
-        "id": "pl_e3",
-        "type": "findTheBug",
-        "question": "В этом коде бесконечный цикл. Найди строку с ошибкой.",
-        "difficulty": "medium",
-        "codeSnippet": "count = 0\nwhile count < 5:\n    print(count)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "print(count)",
-        "explanation": "Внутри цикла count никогда не увеличивается, поэтому условие всегда истинно.",
-        "hints": ["Проверь, изменяется ли переменная count внутри цикла."]
-      },
-      {
-        "id": "pl_e4",
-        "type": "reorderLines",
-        "question": "Расставь строки так, чтобы вывести квадраты чисел от 1 до 3.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": ["    print(i * i)", "for i in range(1, 4):"],
-        "matchPairs": [],
-        "correctAnswer": "for i in range(1, 4):\n    print(i * i)",
-        "explanation": "Строка с циклом должна идти первой, а вложенная инструкция — с отступом внутри неё.",
-        "hints": ["Заголовок цикла всегда идёт раньше тела цикла."]
-      },
-      {
-        "id": "pl_e5",
-        "type": "writeCode",
-        "question": "Напиши программу, которая выводит числа от 1 до 100.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "for i in range(1, 101):\n    print(i)",
-        "explanation": "range(1, 101) даёт числа от 1 до 100 включительно.",
-        "hints": ["range(1, 101) включает 1, но не включает 101.", "Не забудь, что верхняя граница range() не включается."]
-      }
-    ]
-  },
-  {
-    "id": "python_functions_l1",
-    "title": "Functions",
-    "description": "Определение и вызов собственных функций.",
-    "topicId": "python_functions",
-    "courseId": "python",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pf_e1",
-        "type": "multipleChoice",
-        "question": "Какое ключевое слово используется для объявления функции в Python?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["def", "function", "func", "define"],
-        "matchPairs": [],
-        "correctAnswer": "def",
-        "explanation": "Функции в Python объявляются ключевым словом def.",
-        "hints": ["Это короткое трёхбуквенное слово."]
-      },
-      {
-        "id": "pf_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "def square(x):\n    return x * x\n\nprint(square(4))",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "16",
-        "explanation": "Функция square возводит число в квадрат: 4 * 4 = 16.",
-        "hints": ["Функция возвращает x умноженное на x."]
-      },
-      {
-        "id": "pf_e3",
-        "type": "findTheBug",
-        "question": "В этом коде функция не возвращает значение. Найди строку с ошибкой.",
-        "difficulty": "medium",
-        "codeSnippet": "def add(a, b):\n    result = a + b\n\nprint(add(2, 3))",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "    result = a + b",
-        "explanation": "Функция вычисляет result, но никогда не возвращает его через return.",
-        "hints": ["Без return функция всегда возвращает None."]
-      },
-      {
-        "id": "pf_e4",
-        "type": "codeCompletion",
-        "question": "Дополни функцию, чтобы она возвращала удвоенное значение x.",
-        "difficulty": "medium",
-        "codeSnippet": "def double(x):\n    ____ x * 2",
-        "options": ["return", "print", "yield", "output"],
-        "matchPairs": [],
-        "correctAnswer": "return",
-        "explanation": "return передаёт значение обратно туда, откуда функция была вызвана.",
-        "hints": ["Нужно ключевое слово, которое возвращает значение из функции."]
-      },
-      {
-        "id": "pf_e5",
-        "type": "writeCode",
-        "question": "Напиши функцию is_even(n), которая возвращает True, если число чётное, иначе False.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "def is_even(n):\n    return n % 2 == 0",
-        "explanation": "Выражение n % 2 == 0 само по себе уже является True или False.",
-        "hints": ["Тебе не нужен if — выражение сравнения уже возвращает булево значение.", "n % 2 == 0 истинно только для чётных чисел."]
-      }
-    ]
-  },
-  {
-    "id": "python_lists_l1",
-    "title": "Lists",
-    "description": "Списки: создание, индексация, добавление элементов.",
-    "topicId": "python_lists",
-    "courseId": "python",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "plist_e1",
-        "type": "multipleChoice",
-        "question": "Как создать пустой список в Python?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["[]", "{}", "()", "list.new()"],
-        "matchPairs": [],
-        "correctAnswer": "[]",
-        "explanation": "Квадратные скобки создают список, фигурные — словарь или множество.",
-        "hints": ["Это самый короткий и распространённый способ."]
-      },
-      {
-        "id": "plist_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "fruits = [\"apple\", \"banana\", \"cherry\"]\nprint(fruits[1])",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "banana",
-        "explanation": "Индексация в Python начинается с 0, поэтому fruits[1] — второй элемент.",
-        "hints": ["Индекс 0 — это первый элемент, индекс 1 — второй."]
-      },
-      {
-        "id": "plist_e3",
-        "type": "codeCompletion",
-        "question": "Как добавить элемент 'orange' в конец списка fruits?",
-        "difficulty": "medium",
-        "codeSnippet": "fruits = [\"apple\", \"banana\"]\nfruits.____(\"orange\")",
-        "options": ["append", "add", "push", "insert"],
-        "matchPairs": [],
-        "correctAnswer": "append",
-        "explanation": "Метод append() добавляет элемент в конец списка.",
-        "hints": ["Это самый распространённый метод для добавления элемента в конец списка."]
-      },
-      {
-        "id": "plist_e4",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "numbers = [1, 2, 3]\nprint(numbers[3])",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "print(numbers[3])",
-        "explanation": "У списка из 3 элементов индексы 0, 1, 2 — индекса 3 не существует.",
-        "hints": ["Список из 3 элементов имеет индексы от 0 до 2."]
-      },
-      {
-        "id": "plist_e5",
-        "type": "writeCode",
-        "question": "Напиши код, который создаёт список из трёх любимых языков программирования и выводит его длину.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "languages = [\"Python\", \"JavaScript\", \"Dart\"]\nprint(len(languages))",
-        "explanation": "len() возвращает количество элементов в списке.",
-        "hints": ["Используй len() для подсчёта элементов списка."]
-      }
-    ]
-  },
-  {
-    "id": "python_dictionaries_l1",
-    "title": "Dictionaries",
-    "description": "Словари: пары ключ-значение.",
-    "topicId": "python_dictionaries",
-    "courseId": "python",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "pd_e1",
-        "type": "multipleChoice",
-        "question": "Как создать словарь с ключом 'name' и значением 'Alex'?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["{\"name\": \"Alex\"}", "[\"name\": \"Alex\"]", "(\"name\", \"Alex\")", "{name = \"Alex\"}"],
-        "matchPairs": [],
-        "correctAnswer": "{\"name\": \"Alex\"}",
-        "explanation": "Словари создаются фигурными скобками с парами ключ: значение.",
-        "hints": ["Словари используют фигурные скобки и двоеточие между ключом и значением."]
-      },
-      {
-        "id": "pd_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "user = {\"name\": \"Alex\", \"age\": 25}\nprint(user[\"age\"])",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "25",
-        "explanation": "Обращение по ключу \"age\" возвращает связанное с ним значение 25.",
-        "hints": ["Обращение к словарю по ключу возвращает соответствующее значение."]
-      },
-      {
-        "id": "pd_e3",
-        "type": "matchPairs",
-        "question": "Сопоставь метод словаря с его действием.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [
-          {"left": ".keys()", "right": "Возвращает все ключи"},
-          {"left": ".values()", "right": "Возвращает все значения"},
-          {"left": ".get()", "right": "Безопасно получает значение по ключу"}
-        ],
-        "correctAnswer": null,
-        "explanation": ".get() особенно полезен, когда ключ может отсутствовать в словаре.",
-        "hints": ["Подумай, что логично возвращает каждый метод по названию."]
-      },
-      {
-        "id": "pd_e4",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "scores = {\"Alex\": 90, \"Anna\": 85}\nprint(scores[\"David\"])",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "print(scores[\"David\"])",
-        "explanation": "Ключа \"David\" нет в словаре, поэтому обращение к нему вызовет ошибку KeyError.",
-        "hints": ["Проверь, есть ли такой ключ в словаре."]
-      },
-      {
-        "id": "pd_e5",
-        "type": "writeCode",
-        "question": "Напиши код, который создаёт словарь с твоим именем и возрастом и выводит оба значения.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "person = {\"name\": \"Alex\", \"age\": 25}\nprint(person[\"name\"])\nprint(person[\"age\"])",
-        "explanation": "Каждое значение словаря можно получить отдельно по своему ключу.",
-        "hints": ["Создай словарь с двумя ключами, затем обратись к каждому по очереди."]
-      }
-    ]
-  },
-  {
-    "id": "python_oop_l1",
-    "title": "OOP",
-    "description": "Классы, объекты и основы объектно-ориентированного программирования.",
-    "topicId": "python_oop",
-    "courseId": "python",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "poop_e1",
-        "type": "multipleChoice",
-        "question": "Какое ключевое слово используется для создания класса в Python?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["class", "struct", "object", "type"],
-        "matchPairs": [],
-        "correctAnswer": "class",
-        "explanation": "Классы в Python объявляются ключевым словом class.",
-        "hints": ["Это слово прямо переводится как 'класс'."]
-      },
-      {
-        "id": "poop_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\nd = Dog(\"Rex\")\nprint(d.name)",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Rex",
-        "explanation": "__init__ сохраняет переданное имя в атрибут self.name.",
-        "hints": ["__init__ — это конструктор, который вызывается при создании объекта."]
-      },
-      {
-        "id": "poop_e3",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "class Cat:\n    def __init__(name):\n        self.name = name",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "    def __init__(name):",
-        "explanation": "Первым параметром метода класса всегда должен быть self.",
-        "hints": ["Методам класса нужен специальный первый параметр, который ссылается на сам объект."]
-      },
-      {
-        "id": "poop_e4",
-        "type": "codeCompletion",
-        "question": "Дополни метод класса, чтобы он возвращал приветствие с именем.",
-        "difficulty": "medium",
-        "codeSnippet": "class Person:\n    def __init__(self, name):\n        self.name = name\n\n    def greet(____):\n        return \"Привет, \" + self.name",
-        "options": ["self", "this", "cls", "name"],
-        "matchPairs": [],
-        "correctAnswer": "self",
-        "explanation": "В Python методы класса принимают self первым параметром для доступа к атрибутам объекта.",
-        "hints": ["В Python это соглашение называется self, а не this."]
-      },
-      {
-        "id": "poop_e5",
-        "type": "writeCode",
-        "question": "Напиши класс Book с атрибутами title и author и методом describe(), который возвращает строку с описанием книги.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n\n    def describe(self):\n        return self.title + \" by \" + self.author",
-        "explanation": "Конструктор сохраняет атрибуты, а метод describe() собирает их в одну строку.",
-        "hints": ["__init__ должен сохранить оба параметра как self.title и self.author.", "describe() должен вернуть строку, объединяющую title и author."]
-      }
-    ]
-  }
-]
+{
+  "id": "python",
+  "track": "programming",
+  "title": "Python",
+  "description": "Самый популярный язык для начала: от переменных до ООП.",
+  "iconName": "code",
+  "colorSeed": "#3B82C4",
+  "isAvailable": true,
+  "comingSoon": false,
+  "topics": [
+    {
+      "id": "python_variables",
+      "courseId": "python",
+      "title": "Variables",
+      "orderIndex": 0,
+      "iconName": "variable",
+      "lessonIds": ["python_variables_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": []
+    },
+    {
+      "id": "python_strings",
+      "courseId": "python",
+      "title": "Strings",
+      "orderIndex": 1,
+      "iconName": "text",
+      "lessonIds": ["python_strings_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_variables"]
+    },
+    {
+      "id": "python_numbers",
+      "courseId": "python",
+      "title": "Numbers",
+      "orderIndex": 2,
+      "iconName": "number",
+      "lessonIds": ["python_numbers_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_strings"]
+    },
+    {
+      "id": "python_conditions",
+      "courseId": "python",
+      "title": "Conditions",
+      "orderIndex": 3,
+      "iconName": "condition",
+      "lessonIds": ["python_conditions_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_numbers"]
+    },
+    {
+      "id": "python_project_greeting",
+      "courseId": "python",
+      "title": "Mini Project",
+      "orderIndex": 4,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "python_project_greeting",
+      "prerequisiteTopicIds": ["python_conditions"]
+    },
+    {
+      "id": "python_loops",
+      "courseId": "python",
+      "title": "Loops",
+      "orderIndex": 5,
+      "iconName": "loop",
+      "lessonIds": ["python_loops_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_project_greeting"]
+    },
+    {
+      "id": "python_project_loops",
+      "courseId": "python",
+      "title": "Mini Project",
+      "orderIndex": 6,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "python_project_loops",
+      "prerequisiteTopicIds": ["python_loops"]
+    },
+    {
+      "id": "python_functions",
+      "courseId": "python",
+      "title": "Functions",
+      "orderIndex": 7,
+      "iconName": "function",
+      "lessonIds": ["python_functions_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_project_loops"]
+    },
+    {
+      "id": "python_lists",
+      "courseId": "python",
+      "title": "Lists",
+      "orderIndex": 8,
+      "iconName": "list",
+      "lessonIds": ["python_lists_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_functions"]
+    },
+    {
+      "id": "python_dictionaries",
+      "courseId": "python",
+      "title": "Dictionaries",
+      "orderIndex": 9,
+      "iconName": "dict",
+      "lessonIds": ["python_dictionaries_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_lists"]
+    },
+    {
+      "id": "python_oop",
+      "courseId": "python",
+      "title": "OOP",
+      "orderIndex": 10,
+      "iconName": "oop",
+      "lessonIds": ["python_oop_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["python_dictionaries"]
+    }
+  ]
+}
