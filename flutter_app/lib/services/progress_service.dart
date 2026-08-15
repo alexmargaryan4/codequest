@@ -1,5 +1,7 @@
 import '../core/constants/xp_constants.dart';
+import '../models/course.dart';
 import '../models/user_progress.dart';
+import '../repositories/course_repository.dart';
 import '../repositories/progress_repository.dart';
 
 /// Outcome of an XP-awarding action, used by the UI layer to trigger the
@@ -22,9 +24,12 @@ class XpAwardResult {
 /// [ProgressRepository]. UI and feature code should go through this
 /// service rather than mutating [UserProgress] directly.
 class ProgressService {
-  ProgressService({required ProgressRepository repository}) : _repository = repository;
+  ProgressService({required ProgressRepository repository, CourseRepository? courseRepository})
+      : _repository = repository,
+        _courseRepository = courseRepository ?? CourseRepository();
 
   final ProgressRepository _repository;
+  final CourseRepository _courseRepository;
 
   Future<UserProgress> loadProgress() => _repository.load();
 
@@ -117,7 +122,7 @@ class ProgressService {
       completedLessonIds: <String>{...withStreak.completedLessonIds, lessonId},
     );
     await _repository.saveCore(updated);
-    return updated;
+    return _maybeCompleteTopic(topicId: topicId, courseId: courseId, progress: updated);
   }
 
   Future<UserProgress> completeTopic({required String topicId, required String courseId}) async {
@@ -144,7 +149,12 @@ class ProgressService {
       completedProjectIds: <String>{...withStreak.completedProjectIds, projectId},
     );
     await _repository.saveCore(updated);
-    return updated;
+    final TopicNode? topic = await _findTopic(topicId);
+    return _maybeCompleteTopic(
+      topicId: topicId,
+      courseId: topic?.courseId ?? '',
+      progress: updated,
+    );
   }
 
   Future<void> recordExerciseAttempt({
@@ -164,6 +174,48 @@ class ProgressService {
   Future<UserProgress> setActiveCourse(String courseId) async {
     final UserProgress current = await _repository.load();
     final UserProgress updated = current.copyWith(activeCourseId: courseId);
+    await _repository.saveCore(updated);
+    return updated;
+  }
+
+  /// Looks up a topic by id across every bundled course.
+  Future<TopicNode?> _findTopic(String topicId) async {
+    final Course? course = await _courseRepository.getCourseForTopic(topicId);
+    if (course == null) return null;
+    for (final TopicNode t in course.topics) {
+      if (t.id == topicId) return t;
+    }
+    return null;
+  }
+
+  /// Marks [topicId] as completed once every lesson AND the mini-project
+  /// (when the topic has one) it owns are done. This is what actually
+  /// unlocks the next topic on the course map — without it, topics with
+  /// [prerequisiteTopicIds] set stay locked forever, and a topic with a
+  /// single lesson looks like it "restarts" because it never advances
+  /// past itself.
+  Future<UserProgress> _maybeCompleteTopic({
+    required String topicId,
+    required String courseId,
+    required UserProgress progress,
+  }) async {
+    if (progress.completedTopicIds.contains(topicId)) return progress;
+
+    final TopicNode? topic = await _findTopic(topicId);
+    if (topic == null) return progress;
+
+    final bool allLessonsDone =
+        topic.lessonIds.every(progress.completedLessonIds.contains);
+    final bool projectDone = topic.miniProjectId == null ||
+        progress.completedProjectIds.contains(topic.miniProjectId);
+
+    if (!allLessonsDone || !projectDone) return progress;
+
+    await _repository.markTopicCompleted(topicId: topicId, courseId: topic.courseId);
+    final UserProgress reloaded = await _repository.load();
+    final UserProgress updated = reloaded.copyWith(
+      completedTopicIds: <String>{...reloaded.completedTopicIds, topicId},
+    );
     await _repository.saveCore(updated);
     return updated;
   }

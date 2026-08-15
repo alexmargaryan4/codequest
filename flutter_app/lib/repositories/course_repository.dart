@@ -55,6 +55,20 @@ class CourseRepository {
     }
   }
 
+  /// Finds whichever bundled course owns the topic with [topicId].
+  /// Used by [ProgressService] to resolve a topic's full lesson/project
+  /// list from just a topicId, without every caller needing to also
+  /// thread a courseId through.
+  Future<Course?> getCourseForTopic(String topicId) async {
+    final List<Course> all = await _loadRawCourses();
+    for (final Course course in all) {
+      if (course.topics.any((TopicNode t) => t.id == topicId)) {
+        return course;
+      }
+    }
+    return null;
+  }
+
   /// Returns [course] with every topic's status resolved against
   /// [progress]: completed topics marked completed, the first
   /// not-yet-completed topic whose prerequisites are all satisfied marked

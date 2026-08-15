@@ -27,7 +27,10 @@ final Provider<ProgressRepository> progressRepositoryProvider =
 });
 
 final Provider<ProgressService> progressServiceProvider = Provider<ProgressService>((Ref ref) {
-  return ProgressService(repository: ref.watch(progressRepositoryProvider));
+  return ProgressService(
+    repository: ref.watch(progressRepositoryProvider),
+    courseRepository: ref.watch(courseRepositoryProvider),
+  );
 });
 
 final Provider<LessonRepository> lessonRepositoryProvider = Provider<LessonRepository>((Ref ref) {
