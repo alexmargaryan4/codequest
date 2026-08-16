@@ -3,12 +3,16 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/game_economy_constants.dart';
+import '../../../core/providers/gems_provider.dart';
 import '../../../core/providers/progress_provider.dart';
+import '../../../core/providers/quest_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../../models/daily_challenge.dart';
 import '../../../models/exercise.dart';
+import '../../../models/weekly_quest.dart';
 import '../../../shared/widgets/level_up_overlay.dart';
 import '../../exercises/presentation/exercise_widget_factory.dart';
 import '../application/daily_challenge_providers.dart';
@@ -188,6 +192,16 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
     await progressNotifier.awardXp(widget.challenge.xpReward);
     final ProgressEvent? event = progressNotifier.lastEvent;
     progressNotifier.clearEvent();
+
+    ref.read(gemsProvider.notifier).earn(GemsConfig.dailyChallengeComplete);
+
+    final questsNotifier = ref.read(weeklyQuestsProvider.notifier);
+    questsNotifier.recordProgress(metric: QuestMetric.exercisesSolved, amount: 1);
+    questsNotifier.recordProgress(
+      metric: QuestMetric.xpEarned,
+      amount: widget.challenge.xpReward,
+    );
+
     if (!mounted) return;
     if (event?.leveledUp == true) {
       setState(() => _pendingLevelUp = event!.newLevel);

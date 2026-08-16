@@ -6,10 +6,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/game_economy_constants.dart';
+import '../../../core/providers/gems_provider.dart';
 import '../../../core/providers/progress_provider.dart';
+import '../../../core/providers/quest_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/mini_project.dart';
+import '../../../models/weekly_quest.dart';
 import '../../exercises/presentation/widgets/exercise_common.dart';
 
 /// Loads a [MiniProject] by id from the bundled per-course project data.
@@ -101,6 +105,13 @@ class _MiniProjectScreenState extends ConsumerState<MiniProjectScreen> {
     final notifier = ref.read(userProgressProvider.notifier);
     await notifier.completeMiniProject(projectId: project.id, topicId: widget.topicId);
     notifier.clearEvent();
+
+    ref.read(gemsProvider.notifier).earn(GemsConfig.miniProjectComplete);
+
+    final questsNotifier = ref.read(weeklyQuestsProvider.notifier);
+    questsNotifier.recordProgress(metric: QuestMetric.projectsCompleted, amount: 1);
+    questsNotifier.recordProgress(metric: QuestMetric.xpEarned, amount: project.xpReward);
+
     setState(() {
       _submitted = true;
     });

@@ -13,7 +13,7 @@ class AppDatabase {
   static final AppDatabase instance = AppDatabase._();
 
   static const String _dbName = 'codequest.db';
-  static const int _dbVersion = 1;
+  static const int _dbVersion = 2;
 
   Database? _db;
 
@@ -29,6 +29,7 @@ class AppDatabase {
       path,
       version: _dbVersion,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -115,6 +116,8 @@ class AppDatabase {
       )
     ''');
 
+    await _createEconomyTables(db);
+
     // Seed the single user_progress row.
     await db.insert('user_progress', <String, Object?>{
       'id': 1,
@@ -125,6 +128,69 @@ class AppDatabase {
       'projects_completed': 0,
       'active_course_id': 'python',
     });
+
+    await _seedEconomyRows(db);
+  }
+
+  /// Hearts / gems / weekly-quests tables, added in schema v2. Split into
+  /// its own method so both a fresh install ([_onCreate]) and an
+  /// existing v1 database ([_onUpgrade]) can create them identically.
+  Future<void> _createEconomyTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE hearts_state (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        current INTEGER NOT NULL DEFAULT 5,
+        last_lost_at TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE gems_wallet (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        balance INTEGER NOT NULL DEFAULT 0,
+        streak_freeze_available INTEGER NOT NULL DEFAULT 0,
+        xp_boost_active_until TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE weekly_quests (
+        id TEXT NOT NULL,
+        week_key TEXT NOT NULL,
+        metric TEXT NOT NULL,
+        target INTEGER NOT NULL,
+        progress INTEGER NOT NULL DEFAULT 0,
+        gems_reward INTEGER NOT NULL DEFAULT 0,
+        xp_reward INTEGER NOT NULL DEFAULT 0,
+        completed INTEGER NOT NULL DEFAULT 0,
+        claimed_at TEXT,
+        PRIMARY KEY (id, week_key)
+      )
+    ''');
+    await db.execute(
+      'CREATE INDEX idx_weekly_quests_week ON weekly_quests(week_key)',
+    );
+  }
+
+  Future<void> _seedEconomyRows(Database db) async {
+    await db.insert('hearts_state', <String, Object?>{
+      'id': 1,
+      'current': 5,
+      'last_lost_at': null,
+    });
+    await db.insert('gems_wallet', <String, Object?>{
+      'id': 1,
+      'balance': 20,
+      'streak_freeze_available': 0,
+      'xp_boost_active_until': null,
+    });
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await _createEconomyTables(db);
+      await _seedEconomyRows(db);
+    }
   }
 
   Future<void> close() async {

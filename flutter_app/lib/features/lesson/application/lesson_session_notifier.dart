@@ -1,8 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/game_economy_constants.dart';
 import '../../../core/providers/core_providers.dart';
+import '../../../core/providers/gems_provider.dart';
+import '../../../core/providers/hearts_provider.dart';
+import '../../../core/providers/quest_provider.dart';
 import '../../../models/exercise.dart';
+import '../../../models/gems_wallet.dart';
 import '../../../models/lesson.dart';
+import '../../../models/weekly_quest.dart';
 import '../../../core/constants/xp_constants.dart';
 
 /// Immutable snapshot of where the user is within a single lesson
@@ -108,14 +114,24 @@ class LessonSessionNotifier extends StateNotifier<LessonSessionState> {
   /// types (writeCode/practicalTask/miniChallenge) pass `true` once the
   /// user has self-assessed or received AI feedback, since they have no
   /// single strict correct answer.
+  ///
+  /// Side effects beyond this session's own state — heart loss on a
+  /// wrong answer, quest progress on a correct one — are dispatched to
+  /// their own providers without awaiting, so the UI updates
+  /// immediately. Those providers own their state independently and the
+  /// top bar reflects them via Riverpod on their own schedule.
   void submitAnswer({required bool answerIsCorrect}) {
     final Exercise exercise = state.currentExercise;
     if (state.currentAnswered) return;
 
     final int hintsUsed = state.hintsUsedByExercise[exercise.id] ?? 0;
-    final int xp = answerIsCorrect
+    final int baseXp = answerIsCorrect
         ? (hintsUsed > 0 ? XpRewards.correctAnswerAfterHint : XpRewards.correctAnswerFirstTry)
         : 0;
+
+    final GemsWallet? wallet = ref.read(gemsProvider).valueOrNull;
+    final bool boosted = wallet?.hasActiveXpBoost ?? false;
+    final int xp = boosted ? (baseXp * GemsConfig.xpBoostMultiplier).round() : baseXp;
 
     state = state.copyWith(
       answered: <String>{...state.answered, exercise.id},
@@ -131,6 +147,24 @@ class LessonSessionNotifier extends StateNotifier<LessonSessionState> {
           usedHint: hintsUsed > 0,
           timeSeconds: DateTime.now().difference(state.startedAt).inSeconds,
         );
+
+    if (answerIsCorrect) {
+      ref.read(weeklyQuestsProvider.notifier).recordProgress(
+            metric: QuestMetric.exercisesSolved,
+            amount: 1,
+          );
+      if (xp > 0) {
+        ref.read(weeklyQuestsProvider.notifier).recordProgress(
+              metric: QuestMetric.xpEarned,
+              amount: xp,
+            );
+      }
+    } else {
+      // Wrong answer costs a heart. Fire-and-forget: the hearts provider
+      // updates on its own schedule and the top bar reflects it via
+      // Riverpod, independent of this notifier's state.
+      ref.read(heartsProvider.notifier).loseHeart();
+    }
   }
 
   void registerHintUsed() {

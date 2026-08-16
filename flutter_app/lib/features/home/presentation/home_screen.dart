@@ -3,13 +3,21 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/gems_provider.dart';
+import '../../../core/providers/hearts_provider.dart';
 import '../../../core/providers/progress_provider.dart';
+import '../../../core/providers/quest_provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/course.dart';
 import '../../../models/daily_challenge.dart';
+import '../../../models/gems_wallet.dart';
+import '../../../models/hearts_state.dart';
 import '../../../models/user_progress.dart';
+import '../../../models/weekly_quest.dart';
+import '../../../shared/widgets/gems_badge.dart';
+import '../../../shared/widgets/hearts_badge.dart';
 import '../../../shared/widgets/stat_chip.dart';
 import '../../../shared/widgets/streak_badge.dart';
 import '../../../shared/widgets/topic_node_widget.dart';
@@ -44,7 +52,39 @@ class HomeScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text('CodeQuest', style: text.headlineMedium),
-                        StreakBadge(days: progress.currentStreak),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Consumer(
+                              builder: (BuildContext context, WidgetRef ref, _) {
+                                final AsyncValue<HeartsState> heartsAsync =
+                                    ref.watch(heartsProvider);
+                                return heartsAsync.maybeWhen(
+                                  data: (HeartsState hearts) => HeartsBadge(
+                                    hearts: hearts,
+                                    onTap: () => context.push(AppRoutes.shop),
+                                  ),
+                                  orElse: () => const SizedBox.shrink(),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            Consumer(
+                              builder: (BuildContext context, WidgetRef ref, _) {
+                                final AsyncValue<GemsWallet> gemsAsync = ref.watch(gemsProvider);
+                                return gemsAsync.maybeWhen(
+                                  data: (GemsWallet wallet) => GemsBadge(
+                                    balance: wallet.balance,
+                                    onTap: () => context.push(AppRoutes.shop),
+                                  ),
+                                  orElse: () => const SizedBox.shrink(),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            StreakBadge(days: progress.currentStreak),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -100,6 +140,22 @@ class HomeScreen extends ConsumerWidget {
                             ref.watch(dailyChallengeProvider);
                         return challengeAsync.maybeWhen(
                           data: (DailyChallenge c) => _DailyChallengeCard(challenge: c),
+                          orElse: () => const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Consumer(
+                      builder: (BuildContext context, WidgetRef ref, _) {
+                        final AsyncValue<List<WeeklyQuest>> questsAsync =
+                            ref.watch(weeklyQuestsProvider);
+                        return questsAsync.maybeWhen(
+                          data: (List<WeeklyQuest> quests) =>
+                              _WeeklyQuestsCard(quests: quests),
                           orElse: () => const SizedBox.shrink(),
                         );
                       },
@@ -298,6 +354,75 @@ class _DailyChallengeCard extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _WeeklyQuestsCard extends StatelessWidget {
+  const _WeeklyQuestsCard({required this.quests});
+  final List<WeeklyQuest> quests;
+
+  @override
+  Widget build(BuildContext context) {
+    if (quests.isEmpty) return const SizedBox.shrink();
+
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+    final int completedCount = quests.where((WeeklyQuest q) => q.completed).length;
+    final bool hasUnclaimed = quests.any((WeeklyQuest q) => q.completed && !q.isClaimed);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      onTap: () => context.push(AppRoutes.weeklyQuests),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: semantic.surfaceRaised,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(
+            color: hasUnclaimed ? AppColors.accentIndigo.withValues(alpha: 0.4) : semantic.border,
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.accentIndigo.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              child: const Icon(Icons.flag_rounded, color: AppColors.accentIndigo, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Квесты недели', style: text.titleSmall),
+                  Text(
+                    hasUnclaimed
+                        ? 'Есть награда за получением!'
+                        : '$completedCount из ${quests.length} выполнено',
+                    style: text.bodySmall?.copyWith(color: semantic.textMuted),
+                  ),
+                ],
+              ),
+            ),
+            if (hasUnclaimed)
+              Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  color: AppColors.accentIndigo,
+                  shape: BoxShape.circle,
+                ),
+              )
+            else
+              const Icon(Icons.chevron_right_rounded),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.05, end: 0);
   }
 }
 

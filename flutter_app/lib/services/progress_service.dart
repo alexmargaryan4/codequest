@@ -3,6 +3,7 @@ import '../models/course.dart';
 import '../models/user_progress.dart';
 import '../repositories/course_repository.dart';
 import '../repositories/progress_repository.dart';
+import 'gems_service.dart';
 
 /// Outcome of an XP-awarding action, used by the UI layer to trigger the
 /// right celebratory animation (XP popup vs full level-up sequence).
@@ -24,12 +25,21 @@ class XpAwardResult {
 /// [ProgressRepository]. UI and feature code should go through this
 /// service rather than mutating [UserProgress] directly.
 class ProgressService {
-  ProgressService({required ProgressRepository repository, CourseRepository? courseRepository})
-      : _repository = repository,
-        _courseRepository = courseRepository ?? CourseRepository();
+  ProgressService({
+    required ProgressRepository repository,
+    CourseRepository? courseRepository,
+    GemsService? gemsService,
+  })  : _repository = repository,
+        _courseRepository = courseRepository ?? CourseRepository(),
+        _gemsService = gemsService;
 
   final ProgressRepository _repository;
   final CourseRepository _courseRepository;
+
+  /// Optional so existing tests/call sites that don't care about the
+  /// streak-freeze perk keep working without wiring it up. When absent,
+  /// a missed day always resets the streak (previous behavior).
+  final GemsService? _gemsService;
 
   Future<UserProgress> loadProgress() => _repository.load();
 
@@ -40,7 +50,7 @@ class ProgressService {
     final UserProgress before = current ?? await _repository.load();
     final int previousLevel = before.level;
 
-    final UserProgress withStreak = _applyDailyStreak(before);
+    final UserProgress withStreak = await _applyDailyStreak(before);
     final UserProgress updated = withStreak.copyWith(totalXp: withStreak.totalXp + xp);
 
     await _repository.saveCore(updated);
@@ -59,14 +69,19 @@ class ProgressService {
   /// reflects reality even before the user does anything today.
   Future<UserProgress> refreshStreakOnly() async {
     final UserProgress current = await _repository.load();
-    final UserProgress updated = _applyDailyStreak(current);
+    final UserProgress updated = await _applyDailyStreak(current);
     if (updated.currentStreak != current.currentStreak) {
       await _repository.saveCore(updated);
     }
     return updated;
   }
 
-  UserProgress _applyDailyStreak(UserProgress progress) {
+  /// Applies the day-over-day streak transition. When one or more days
+  /// were missed, first gives an available streak-freeze charge (see
+  /// [GemsService.consumeStreakFreezeIfAvailable]) a chance to preserve
+  /// the streak instead of resetting it — consuming the charge in the
+  /// process so it only ever saves a single missed day.
+  Future<UserProgress> _applyDailyStreak(UserProgress progress) async {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
 
@@ -93,7 +108,19 @@ class ProgressService {
         lastActivityDate: today,
       );
     } else {
-      // Missed one or more days — streak resets.
+      // Missed one or more days — try to spend a streak freeze before
+      // resetting. A freeze covers the gap and continues the streak as
+      // if today were the very next day.
+      final bool saved = _gemsService != null &&
+          await _gemsService.consumeStreakFreezeIfAvailable();
+      if (saved) {
+        final int newStreak = progress.currentStreak + 1;
+        return progress.copyWith(
+          currentStreak: newStreak,
+          longestStreak: newStreak > progress.longestStreak ? newStreak : progress.longestStreak,
+          lastActivityDate: today,
+        );
+      }
       return progress.copyWith(currentStreak: 1, lastActivityDate: today);
     }
   }
@@ -115,7 +142,7 @@ class ProgressService {
     int xp = XpRewards.lessonComplete;
     if (wasPerfect) xp += XpRewards.perfectLessonBonus;
 
-    final UserProgress withStreak = _applyDailyStreak(current);
+    final UserProgress withStreak = await _applyDailyStreak(current);
     final UserProgress updated = withStreak.copyWith(
       totalXp: withStreak.totalXp + xp,
       lessonsCompleted: withStreak.lessonsCompleted + 1,
@@ -142,7 +169,7 @@ class ProgressService {
   }) async {
     await _repository.markProjectCompleted(projectId: projectId, topicId: topicId);
     final UserProgress current = await _repository.load();
-    final UserProgress withStreak = _applyDailyStreak(current);
+    final UserProgress withStreak = await _applyDailyStreak(current);
     final UserProgress updated = withStreak.copyWith(
       totalXp: withStreak.totalXp + xpReward,
       projectsCompleted: withStreak.projectsCompleted + 1,

@@ -3,12 +3,20 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/game_economy_constants.dart';
 import '../../../core/providers/core_providers.dart';
+import '../../../core/providers/gems_provider.dart';
+import '../../../core/providers/hearts_provider.dart';
 import '../../../core/providers/progress_provider.dart';
+import '../../../core/providers/quest_provider.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/exercise.dart';
+import '../../../models/hearts_state.dart';
 import '../../../models/lesson.dart';
+import '../../../models/weekly_quest.dart';
+import '../../../shared/widgets/hearts_badge.dart';
 import '../../../shared/widgets/level_up_overlay.dart';
 import '../../exercises/presentation/exercise_widget_factory.dart';
 import '../application/lesson_provider.dart';
@@ -31,18 +39,83 @@ class LessonScreen extends ConsumerWidget {
     final AsyncValue<Lesson> lessonAsync = ref.watch(
       lessonProvider(LessonRequest(lessonId: lessonId, courseId: courseId, topicId: topicId)),
     );
+    final AsyncValue<HeartsState> heartsAsync = ref.watch(heartsProvider);
+    final HeartsState? hearts = heartsAsync.valueOrNull;
 
     return Scaffold(
       body: SafeArea(
-        child: lessonAsync.when(
-          loading: () => const _LessonLoading(),
-          error: (Object e, StackTrace st) => _LessonError(error: e),
-          data: (Lesson lesson) => _LessonBody(lesson: lesson),
-        ),
+        child: hearts != null && hearts.currentHearts() <= 0
+            ? const _OutOfHearts()
+            : lessonAsync.when(
+                loading: () => const _LessonLoading(),
+                error: (Object e, StackTrace st) => _LessonError(error: e),
+                data: (Lesson lesson) => _LessonBody(lesson: lesson),
+              ),
       ),
     );
   }
 }
+
+/// Shown instead of the lesson body once hearts hit zero — blocks
+/// starting new exercises until at least one heart regenerates or the
+/// user buys one from the shop. The lesson itself is still cached and
+/// resumes normally once hearts are available again.
+class _OutOfHearts extends ConsumerWidget {
+  const _OutOfHearts();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+    final AsyncValue<HeartsState> heartsAsync = ref.watch(heartsProvider);
+    final HeartsState? hearts = heartsAsync.valueOrNull;
+
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 88,
+            height: 88,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.error.withValues(alpha: 0.14),
+            ),
+            child: const Icon(Icons.favorite_border_rounded, color: AppColors.error, size: 44),
+          ).animate().scale(duration: 400.ms, curve: Curves.elasticOut),
+          const SizedBox(height: 20),
+          Text('Жизни закончились', style: text.titleLarge, textAlign: TextAlign.center),
+          const SizedBox(height: 8),
+          Text(
+            'Подожди, пока жизнь восстановится, или пополни их в магазине.',
+            style: text.bodyMedium?.copyWith(color: semantic.textMuted),
+            textAlign: TextAlign.center,
+          ),
+          if (hearts != null) ...<Widget>[
+            const SizedBox(height: 16),
+            HeartsCountdownLabel(hearts: hearts),
+          ],
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () => context.push(AppRoutes.shop),
+              icon: const Icon(Icons.storefront_rounded),
+              label: const Text('Перейти в магазин'),
+            ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton(
+            onPressed: () => context.pop(),
+            child: const Text('Назад'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 class _LessonLoading extends StatelessWidget {
   const _LessonLoading();
@@ -158,6 +231,22 @@ class _LessonBodyState extends ConsumerState<_LessonBody> {
                       Text('${session.xpEarned}', style: text.labelLarge),
                     ],
                   ),
+                  const SizedBox(width: 10),
+                  Consumer(
+                    builder: (BuildContext context, WidgetRef ref, _) {
+                      final AsyncValue<HeartsState> heartsAsync = ref.watch(heartsProvider);
+                      return heartsAsync.maybeWhen(
+                        data: (HeartsState hearts) => Row(
+                          children: <Widget>[
+                            const Icon(Icons.favorite_rounded, color: AppColors.error, size: 16),
+                            const SizedBox(width: 2),
+                            Text('${hearts.currentHearts()}', style: text.labelLarge),
+                          ],
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -272,6 +361,17 @@ class _LessonBodyState extends ConsumerState<_LessonBody> {
     );
     final ProgressEvent? event = notifier.lastEvent;
     notifier.clearEvent();
+
+    final int gemsEarned =
+        GemsConfig.lessonComplete + (session.wasPerfect ? GemsConfig.perfectLessonBonus : 0);
+    ref.read(gemsProvider.notifier).earn(gemsEarned);
+
+    final questsNotifier = ref.read(weeklyQuestsProvider.notifier);
+    questsNotifier.recordProgress(metric: QuestMetric.lessonsCompleted, amount: 1);
+    if (session.wasPerfect) {
+      questsNotifier.recordProgress(metric: QuestMetric.perfectLessons, amount: 1);
+    }
+
     if (event?.leveledUp == true && mounted) {
       setState(() => _pendingLevelUp = event!.newLevel);
     }

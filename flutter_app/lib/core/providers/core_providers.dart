@@ -3,13 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../repositories/achievement_repository.dart';
 import '../../repositories/course_repository.dart';
 import '../../repositories/daily_challenge_repository.dart';
+import '../../repositories/gems_repository.dart';
+import '../../repositories/hearts_repository.dart';
 import '../../repositories/leaderboard_repository.dart';
 import '../../repositories/lesson_repository.dart';
 import '../../repositories/progress_repository.dart';
+import '../../repositories/weekly_quest_repository.dart';
 import '../../services/adaptive_engine.dart';
 import '../../services/ai/ai_service.dart';
+import '../../services/gems_service.dart';
+import '../../services/hearts_service.dart';
 import '../../services/lesson_engine/hint_service.dart';
 import '../../services/progress_service.dart';
+import '../../services/quest_service.dart';
 
 /// Single shared [AIService] instance — owns provider fallback state
 /// (cooldowns, health tracking) for the whole app lifetime.
@@ -30,6 +36,7 @@ final Provider<ProgressService> progressServiceProvider = Provider<ProgressServi
   return ProgressService(
     repository: ref.watch(progressRepositoryProvider),
     courseRepository: ref.watch(courseRepositoryProvider),
+    gemsService: ref.watch(gemsServiceProvider),
   );
 });
 
@@ -61,4 +68,36 @@ final Provider<AchievementRepository> achievementRepositoryProvider =
 final Provider<DailyChallengeRepository> dailyChallengeRepositoryProvider =
     Provider<DailyChallengeRepository>((Ref ref) {
   return DailyChallengeRepository(aiService: ref.watch(aiServiceProvider));
+});
+
+final Provider<HeartsRepository> heartsRepositoryProvider = Provider<HeartsRepository>((Ref ref) {
+  return HeartsRepository();
+});
+
+final Provider<GemsRepository> gemsRepositoryProvider = Provider<GemsRepository>((Ref ref) {
+  return GemsRepository();
+});
+
+final Provider<WeeklyQuestRepository> weeklyQuestRepositoryProvider =
+    Provider<WeeklyQuestRepository>((Ref ref) {
+  return WeeklyQuestRepository();
+});
+
+final Provider<HeartsService> heartsServiceProvider = Provider<HeartsService>((Ref ref) {
+  return HeartsService(
+    repository: ref.watch(heartsRepositoryProvider),
+    gemsRepository: ref.watch(gemsRepositoryProvider),
+  );
+});
+
+final Provider<GemsService> gemsServiceProvider = Provider<GemsService>((Ref ref) {
+  return GemsService(repository: ref.watch(gemsRepositoryProvider));
+});
+
+final Provider<QuestService> questServiceProvider = Provider<QuestService>((Ref ref) {
+  return QuestService(
+    repository: ref.watch(weeklyQuestRepositoryProvider),
+    gemsRepository: ref.watch(gemsRepositoryProvider),
+    progressRepository: ref.watch(progressRepositoryProvider),
+  );
 });
