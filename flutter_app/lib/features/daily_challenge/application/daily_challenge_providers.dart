@@ -12,6 +12,12 @@ import '../../../repositories/course_repository.dart';
 /// user's active course (preferring a struggling topic if the adaptive
 /// engine has flagged one, otherwise the current/next topic) so the
 /// challenge feels relevant rather than random.
+///
+/// Note: this re-runs whenever [userProgressProvider] emits (e.g. after
+/// `awardXp`), but [DailyChallengeRepository.getTodayChallenge] serves
+/// from its local cache once today's challenge has been generated, so a
+/// re-run after the first resolve is a cheap cache hit rather than a
+/// fresh AI call or a visible reload.
 final FutureProvider<DailyChallenge> dailyChallengeProvider =
     FutureProvider<DailyChallenge>((Ref ref) async {
   final UserProgress progress = ref.watch(userProgressProvider).valueOrNull ?? const UserProgress();

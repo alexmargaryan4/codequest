@@ -47,7 +47,7 @@
   },
   {
     "dateKey": "fallback",
-    "topicId": "javascript_functions",
+    "topicId": "js_functions",
     "topicLabel": "Functions",
     "xpReward": 50,
     "isAiGenerated": false,
@@ -133,8 +133,8 @@
   },
   {
     "dateKey": "fallback",
-    "topicId": "cpp_basics",
-    "topicLabel": "C++ Basics",
+    "topicId": "cpp_variables",
+    "topicLabel": "Variables",
     "xpReward": 50,
     "isAiGenerated": false,
     "completed": false,
@@ -156,8 +156,8 @@
   },
   {
     "dateKey": "fallback",
-    "topicId": "prompt_engineering_basics",
-    "topicLabel": "Prompt Engineering",
+    "topicId": "ai_structured_output",
+    "topicLabel": "Structured Output",
     "xpReward": 50,
     "isAiGenerated": false,
     "completed": false,

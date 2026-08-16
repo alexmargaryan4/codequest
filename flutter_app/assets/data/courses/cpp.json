@@ -1,308 +1,92 @@
-[
-  {
-    "id": "cpp_variables_l1",
-    "title": "Variables",
-    "description": "Объявление переменных и типы данных в C++.",
-    "topicId": "cpp_variables",
-    "courseId": "cpp",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "cv_e1",
-        "type": "multipleChoice",
-        "question": "Какая строка правильно объявляет целочисленную переменную age со значением 25?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["int age = 25;", "age = 25;", "var age = 25;", "int age := 25;"],
-        "matchPairs": [],
-        "correctAnswer": "int age = 25;",
-        "explanation": "В C++ переменные объявляются с явным указанием типа перед именем.",
-        "hints": ["В C++ нужно всегда указывать тип переменной перед её именем."]
-      },
-      {
-        "id": "cv_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "int x = 5;\nx = x + 1;\nstd::cout << x;",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "6",
-        "explanation": "x сначала равен 5, затем становится 5 + 1 = 6.",
-        "hints": ["std::cout << выводит значение переменной."]
-      },
-      {
-        "id": "cv_e3",
-        "type": "findTheBug",
-        "question": "В этом коде забыли точку с запятой. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "int age = 25\nstd::cout << age;",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "int age = 25",
-        "explanation": "В C++ каждая инструкция должна заканчиваться точкой с запятой.",
-        "hints": ["Проверь конец каждой строки на наличие точки с запятой."]
-      },
-      {
-        "id": "cv_e4",
-        "type": "writeCode",
-        "question": "Объяви переменную типа double со значением 3.14 и выведи её через std::cout.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "double pi = 3.14;\nstd::cout << pi;",
-        "explanation": "double используется для чисел с плавающей точкой в C++.",
-        "hints": ["Используй тип double для дробных чисел."]
-      }
-    ]
-  },
-  {
-    "id": "cpp_conditions_l1",
-    "title": "Conditions",
-    "description": "Условные конструкции if / else в C++.",
-    "topicId": "cpp_conditions",
-    "courseId": "cpp",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "cc_e1",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "int age = 16;\nif (age >= 18) {\n  std::cout << \"Взрослый\";\n} else {\n  std::cout << \"Ребёнок\";\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Ребёнок",
-        "explanation": "16 меньше 18, поэтому выполняется ветка else.",
-        "hints": ["Проверь условие age >= 18 для age = 16."]
-      },
-      {
-        "id": "cc_e2",
-        "type": "codeCompletion",
-        "question": "Дополни код, чтобы проверить чётность числа.",
-        "difficulty": "medium",
-        "codeSnippet": "if (number % 2 ____ 0) {\n  std::cout << \"Чётное\";\n}",
-        "options": ["==", "=", "=>", "&&"],
-        "matchPairs": [],
-        "correctAnswer": "==",
-        "explanation": "== в C++ сравнивает значения, а одиночный = присваивает.",
-        "hints": ["Одиночный = используется для присваивания, а не сравнения."]
-      },
-      {
-        "id": "cc_e3",
-        "type": "writeCode",
-        "question": "Напиши код, который проверяет, положительное ли число x, и выводит соответствующее сообщение.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "int x = 5;\nif (x > 0) {\n  std::cout << \"Положительное\";\n} else {\n  std::cout << \"Не положительное\";\n}",
-        "explanation": "Простая проверка через if/else покрывает оба случая.",
-        "hints": ["Используй if (x > 0) для проверки."]
-      }
-    ]
-  },
-  {
-    "id": "cpp_loops_l1",
-    "title": "Loops",
-    "description": "Циклы for и while в C++.",
-    "topicId": "cpp_loops",
-    "courseId": "cpp",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "cl_e1",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "for (int i = 0; i < 3; i++) {\n  std::cout << i << \" \";\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "0 1 2",
-        "explanation": "Цикл выполняется для i = 0, 1, 2 — до тех пор, пока i < 3.",
-        "hints": ["Цикл начинается с 0 и продолжается, пока i < 3."]
-      },
-      {
-        "id": "cl_e2",
-        "type": "findTheBug",
-        "question": "В этом коде бесконечный цикл. Найди строку с ошибкой.",
-        "difficulty": "medium",
-        "codeSnippet": "int count = 0;\nwhile (count < 5) {\n  std::cout << count;\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  std::cout << count;",
-        "explanation": "count никогда не увеличивается внутри цикла, поэтому условие всегда истинно.",
-        "hints": ["Проверь, изменяется ли count внутри цикла."]
-      },
-      {
-        "id": "cl_e3",
-        "type": "writeCode",
-        "question": "Напиши цикл for, который выводит числа от 1 до 100.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "for (int i = 1; i <= 100; i++) {\n  std::cout << i << std::endl;\n}",
-        "explanation": "Условие i <= 100 включает само число 100.",
-        "hints": ["Используй <= 100, чтобы включить последнее число."]
-      }
-    ]
-  },
-  {
-    "id": "cpp_functions_l1",
-    "title": "Functions",
-    "description": "Объявление функций с типами параметров и возврата.",
-    "topicId": "cpp_functions",
-    "courseId": "cpp",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "cf_e1",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "int square(int x) {\n  return x * x;\n}\n\nint main() {\n  std::cout << square(4);\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "16",
-        "explanation": "Функция square возводит число в квадрат: 4 * 4 = 16.",
-        "hints": ["Функция возвращает x умноженное на x."]
-      },
-      {
-        "id": "cf_e2",
-        "type": "findTheBug",
-        "question": "В этом коде тип возвращаемого значения не совпадает. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "int add(int a, int b) {\n  return \"result\";\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  return \"result\";",
-        "explanation": "Функция объявлена как возвращающая int, а возвращает строку.",
-        "hints": ["Тип возвращаемого значения должен совпадать с объявленным типом функции."]
-      },
-      {
-        "id": "cf_e3",
-        "type": "writeCode",
-        "question": "Напиши функцию bool isEven(int n), которая возвращает true, если число чётное.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "bool isEven(int n) {\n  return n % 2 == 0;\n}",
-        "explanation": "Выражение n % 2 == 0 само по себе уже bool.",
-        "hints": ["n % 2 == 0 истинно только для чётных чисел."]
-      }
-    ]
-  },
-  {
-    "id": "cpp_pointers_l1",
-    "title": "Pointers",
-    "description": "Указатели: адреса памяти и разыменование.",
-    "topicId": "cpp_pointers",
-    "courseId": "cpp",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "cp_e1",
-        "type": "multipleChoice",
-        "question": "Какой символ используется для объявления указателя в C++?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["*", "&", "#", "@"],
-        "matchPairs": [],
-        "correctAnswer": "*",
-        "explanation": "Звёздочка перед именем переменной объявляет указатель, например int* p.",
-        "hints": ["Этот же символ также используется для умножения, но здесь другой контекст."]
-      },
-      {
-        "id": "cp_e2",
-        "type": "multipleChoice",
-        "question": "Какой оператор получает адрес переменной?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": ["&", "*", "->", "::"],
-        "matchPairs": [],
-        "correctAnswer": "&",
-        "explanation": "Амперсанд возвращает адрес переменной в памяти.",
-        "hints": ["Этот оператор также называется 'address-of'."]
-      },
-      {
-        "id": "cp_e3",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "hard",
-        "codeSnippet": "int x = 10;\nint* p = &x;\nstd::cout << *p;",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "10",
-        "explanation": "*p разыменовывает указатель, возвращая значение, на которое он указывает.",
-        "hints": ["*p означает 'значение по адресу, на который указывает p'."]
-      }
-    ]
-  },
-  {
-    "id": "cpp_oop_l1",
-    "title": "OOP",
-    "description": "Классы и объекты в C++.",
-    "topicId": "cpp_oop",
-    "courseId": "cpp",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "co_e1",
-        "type": "multipleChoice",
-        "question": "Какое ключевое слово используется для объявления класса в C++?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["class", "struct", "object", "type"],
-        "matchPairs": [],
-        "correctAnswer": "class",
-        "explanation": "Классы в C++ объявляются ключевым словом class.",
-        "hints": ["Это прямой перевод слова 'класс'."]
-      },
-      {
-        "id": "co_e2",
-        "type": "findTheBug",
-        "question": "В этом коде забыли точку с запятой после класса. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "class Dog {\n public:\n  std::string name;\n}\n\nint main() {}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "}",
-        "explanation": "В C++ после закрывающей фигурной скобки объявления класса нужна точка с запятой.",
-        "hints": ["Объявление класса в C++ должно заканчиваться точкой с запятой после }."]
-      },
-      {
-        "id": "co_e3",
-        "type": "writeCode",
-        "question": "Напиши класс Book с публичными полями title и author типа std::string.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "class Book {\n public:\n  std::string title;\n  std::string author;\n};",
-        "explanation": "Поля объявлены в секции public, чтобы быть доступными снаружи класса.",
-        "hints": ["Не забудь про public: перед полями и ; после закрывающей скобки."]
-      }
-    ]
-  }
-]
+{
+  "id": "cpp",
+  "track": "programming",
+  "title": "C++",
+  "description": "Системный язык программирования: от переменных до указателей и ООП.",
+  "iconName": "code",
+  "colorSeed": "#00599C",
+  "isAvailable": true,
+  "comingSoon": false,
+  "topics": [
+    {
+      "id": "cpp_variables",
+      "courseId": "cpp",
+      "title": "Variables",
+      "orderIndex": 0,
+      "iconName": "variable",
+      "lessonIds": ["cpp_variables_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": []
+    },
+    {
+      "id": "cpp_conditions",
+      "courseId": "cpp",
+      "title": "Conditions",
+      "orderIndex": 1,
+      "iconName": "condition",
+      "lessonIds": ["cpp_conditions_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["cpp_variables"]
+    },
+    {
+      "id": "cpp_loops",
+      "courseId": "cpp",
+      "title": "Loops",
+      "orderIndex": 2,
+      "iconName": "loop",
+      "lessonIds": ["cpp_loops_l1"],
+      "miniProjectId": "cpp_project_loops",
+      "prerequisiteTopicIds": ["cpp_conditions"]
+    },
+    {
+      "id": "cpp_project_loops",
+      "courseId": "cpp",
+      "title": "Mini Project",
+      "orderIndex": 3,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "cpp_project_loops",
+      "prerequisiteTopicIds": ["cpp_loops"]
+    },
+    {
+      "id": "cpp_functions",
+      "courseId": "cpp",
+      "title": "Functions",
+      "orderIndex": 4,
+      "iconName": "function",
+      "lessonIds": ["cpp_functions_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["cpp_project_loops"]
+    },
+    {
+      "id": "cpp_pointers",
+      "courseId": "cpp",
+      "title": "Pointers",
+      "orderIndex": 5,
+      "iconName": "list",
+      "lessonIds": ["cpp_pointers_l1"],
+      "miniProjectId": "cpp_project_pointers",
+      "prerequisiteTopicIds": ["cpp_functions"]
+    },
+    {
+      "id": "cpp_project_pointers",
+      "courseId": "cpp",
+      "title": "Mini Project",
+      "orderIndex": 6,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "cpp_project_pointers",
+      "prerequisiteTopicIds": ["cpp_pointers"]
+    },
+    {
+      "id": "cpp_oop",
+      "courseId": "cpp",
+      "title": "OOP",
+      "orderIndex": 7,
+      "iconName": "oop",
+      "lessonIds": ["cpp_oop_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["cpp_project_pointers"]
+    }
+  ]
+}

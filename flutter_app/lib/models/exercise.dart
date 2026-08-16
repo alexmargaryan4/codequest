@@ -153,6 +153,18 @@ class Exercise {
   /// Basic structural validation used before an AI-generated exercise is
   /// ever shown to the user. Returns a human-readable error, or null if
   /// valid.
+  ///
+  /// Beyond presence checks, this also verifies that [correctAnswer] is
+  /// actually *reachable* by the interaction the exercise offers — e.g.
+  /// for [ExerciseType.reorderLines] the correct order must be some
+  /// permutation of [options], and for [ExerciseType.findTheBug] the
+  /// flagged line must literally appear in [codeSnippet]. Without these
+  /// checks, an AI response can look structurally fine (every field
+  /// present, right shape) while still being unsolvable: the model
+  /// paraphrases `correctAnswer` slightly differently than the line/
+  /// option text it was derived from, so no tap or drag the user makes
+  /// can ever match it. That previously slipped through as a "valid"
+  /// exercise and always graded as wrong no matter what the user did.
   String? validate() {
     if (id.isEmpty) return 'Exercise missing id';
     if (question.isEmpty) return 'Exercise missing question';
@@ -161,17 +173,42 @@ class Exercise {
       case ExerciseType.multipleChoice:
       case ExerciseType.codeCompletion:
         if (options.length < 2) return 'Needs at least 2 options';
-        if (correctAnswer == null || !options.contains(correctAnswer)) {
-          return 'correctAnswer must be one of options';
+        final String normalizedCorrect = (correctAnswer ?? '').trim();
+        final bool matches =
+            options.any((String o) => o.trim() == normalizedCorrect);
+        if (normalizedCorrect.isEmpty || !matches) {
+          return 'correctAnswer must be exactly equal to one of options';
         }
       case ExerciseType.reorderLines:
         if (options.length < 2) return 'Needs at least 2 lines to reorder';
-        if (correctAnswer == null || correctAnswer!.isEmpty) {
+        if (correctAnswer == null || correctAnswer!.trim().isEmpty) {
           return 'Missing correct order';
+        }
+        final List<String> optionLines =
+            options.map((String o) => o.trim()).toList()..sort();
+        final List<String> correctLines =
+            correctAnswer!.split('\n').map((String l) => l.trim()).toList()
+              ..sort();
+        if (!_sameElements(optionLines, correctLines)) {
+          return 'correctAnswer must be a reordering of the exact lines in options';
         }
       case ExerciseType.matchPairs:
         if (matchPairs.length < 2) return 'Needs at least 2 pairs';
+        if (matchPairs.any((MatchPair p) => p.left.trim().isEmpty || p.right.trim().isEmpty)) {
+          return 'matchPairs entries must not be empty';
+        }
       case ExerciseType.findTheBug:
+        if (codeSnippet == null || codeSnippet!.isEmpty) {
+          return 'Missing codeSnippet';
+        }
+        if (correctAnswer == null || correctAnswer!.trim().isEmpty) {
+          return 'Missing correctAnswer';
+        }
+        final List<String> codeLines =
+            codeSnippet!.split('\n').map((String l) => l.trim()).toList();
+        if (!codeLines.contains(correctAnswer!.trim())) {
+          return 'correctAnswer must be exactly one of the lines in codeSnippet';
+        }
       case ExerciseType.predictOutput:
       case ExerciseType.fixTheCode:
         if (codeSnippet == null || codeSnippet!.isEmpty) {
@@ -187,6 +224,18 @@ class Exercise {
         break;
     }
     return null;
+  }
+
+  /// True if [a] and [b] contain the same elements with the same
+  /// multiplicity, ignoring order. Used to confirm a reorderLines
+  /// `correctAnswer` is a genuine permutation of `options` rather than
+  /// a paraphrase that happens to have the same line count.
+  static bool _sameElements(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   bool get isValid => validate() == null;

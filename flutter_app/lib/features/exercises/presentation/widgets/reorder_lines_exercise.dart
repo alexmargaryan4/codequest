@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -29,7 +31,55 @@ class ReorderLinesExercise extends StatefulWidget {
 }
 
 class _ReorderLinesExerciseState extends State<ReorderLinesExercise> {
-  late final List<String> _order = List<String>.from(widget.exercise.options);
+  late final List<String> _order = _initialOrder();
+
+  /// Shuffles [Exercise.options] into a stable-but-scrambled starting
+  /// order. Bundled/AI content isn't guaranteed to arrive pre-shuffled
+  /// (some sources list the lines already in correct order), so without
+  /// this the exercise could trivially start "solved" and give no
+  /// actual reordering practice.
+  ///
+  /// Deterministic seed (based on the exercise id) rather than pure
+  /// `..shuffle()`: avoids the rare but real chance of shuffling back
+  /// into the exact correct order on some rebuilds, and keeps the
+  /// starting layout stable if the widget rebuilds without the state
+  /// being recreated.
+  List<String> _initialOrder() {
+    final List<String> lines = List<String>.from(widget.exercise.options);
+    final List<String> correct =
+        (widget.exercise.correctAnswer ?? '').split('\n').map((String l) => l.trim()).toList();
+    if (lines.length < 2) return lines;
+
+    final int seed = widget.exercise.id.hashCode;
+    final List<String> shuffled = List<String>.from(lines)..shuffle(Random(seed));
+
+    // If the shuffle happened to land on the already-correct order,
+    // swap the first two lines so the user actually has something to
+    // reorder.
+    final List<String> shuffledTrimmed = shuffled.map((String l) => l.trim()).toList();
+    if (shuffledTrimmed.length == correct.length &&
+        List<int>.generate(shuffledTrimmed.length, (int i) => i)
+            .every((int i) => shuffledTrimmed[i] == correct[i])) {
+      final String tmp = shuffled[0];
+      shuffled[0] = shuffled[1];
+      shuffled[1] = tmp;
+    }
+    return shuffled;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Report the starting order immediately, not just after the first
+    // drag. Without this, a user who submits without ever reordering
+    // (e.g. the shuffle already looks right to them, or they just tap
+    // "Проверить" first) would be graded against a null/empty
+    // selection instead of what's actually on screen — always wrong
+    // regardless of whether their answer was actually correct.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onSelectionChanged(_order.join('\n'));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

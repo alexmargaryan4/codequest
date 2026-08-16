@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/course.dart';
@@ -31,10 +32,32 @@ class CourseRepository {
     for (final String file in _courseFiles) {
       try {
         final String raw = await rootBundle.loadString('assets/data/courses/$file.json');
-        courses.add(Course.fromJson(jsonDecode(raw) as Map<String, dynamic>));
-      } catch (_) {
-        // Missing course file — skip gracefully rather than crashing the
-        // whole course list (useful while new courses are being authored).
+        final Course course = Course.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+        if (course.topics.isEmpty) {
+          // A Course with zero topics almost always means the file was
+          // shaped wrong (e.g. a Lesson[] array parsed leniently into an
+          // empty Course rather than throwing) rather than an
+          // intentionally topic-less course. Surface it loudly instead of
+          // silently dropping the course from the list — this is exactly
+          // the failure mode that made 4 of 5 courses vanish previously.
+          debugPrint(
+            'CourseRepository: "$file.json" parsed with zero topics — '
+            'check that assets/data/courses/$file.json is a Course object '
+            '(not a Lesson[] array) and still adding it to the list so the '
+            'UI surfaces the problem instead of hiding the course.',
+          );
+        }
+        courses.add(course);
+      } catch (e, st) {
+        // Missing or malformed course file. This used to fail silently,
+        // which is exactly how 4 of the 5 courses disappeared from the
+        // course list with no error anywhere — the JSON for those
+        // courses was actually a Lesson[] array (fallback-lesson shape)
+        // living under the wrong filename, Course.fromJson threw while
+        // parsing 'topics', and this catch swallowed it. Logging now so
+        // a future data-file mixup is visible in debug output instead of
+        // silently shrinking the course list.
+        debugPrint('CourseRepository: failed to load "$file.json": $e\n$st');
       }
     }
     _rawCache = courses;

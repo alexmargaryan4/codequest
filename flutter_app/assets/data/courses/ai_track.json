@@ -1,378 +1,112 @@
-[
-  {
-    "id": "ai_basics_l1",
-    "title": "Основы AI",
-    "description": "Что такое искусственный интеллект и как он используется сегодня.",
-    "topicId": "ai_basics",
-    "courseId": "ai_track",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aib_e1",
-        "type": "multipleChoice",
-        "question": "Что означает аббревиатура LLM?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["Large Language Model", "Logical Learning Machine", "Linear Language Method", "Live Learning Module"],
-        "matchPairs": [],
-        "correctAnswer": "Large Language Model",
-        "explanation": "LLM — большая языковая модель, обученная на огромных объёмах текста.",
-        "hints": ["L и M повторяются в аббревиатуре — подумай, какие слова начинаются на них в контексте AI."]
-      },
-      {
-        "id": "aib_e2",
-        "type": "multipleChoice",
-        "question": "Какое из этих утверждений про современные AI-модели верно?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Модель предсказывает наиболее вероятное продолжение текста",
-          "Модель дословно ищет ответ в интернете во время генерации",
-          "Модель всегда даёт стопроцентно верный ответ",
-          "Модель понимает текст так же, как человек"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Модель предсказывает наиболее вероятное продолжение текста",
-        "explanation": "В основе LLM лежит предсказание следующего токена на основе контекста.",
-        "hints": ["Подумай о том, как модель генерирует текст по одному токену за раз."]
-      },
-      {
-        "id": "aib_e3",
-        "type": "matchPairs",
-        "question": "Сопоставь термин с его определением.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [
-          {"left": "Prompt", "right": "Текстовый запрос, который получает модель"},
-          {"left": "Token", "right": "Небольшой фрагмент текста, единица обработки модели"},
-          {"left": "Context window", "right": "Максимальный объём текста, который модель учитывает за раз"}
-        ],
-        "correctAnswer": null,
-        "explanation": "Эти три термина — базовый словарь для работы с любой LLM.",
-        "hints": ["Подумай, какое слово логичнее всего описывает каждое понятие."]
-      }
-    ]
-  },
-  {
-    "id": "ai_how_llms_work_l1",
-    "title": "Как работают LLM",
-    "description": "Токенизация, предсказание следующего токена, обучение на данных.",
-    "topicId": "ai_how_llms_work",
-    "courseId": "ai_track",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aihow_e1",
-        "type": "multipleChoice",
-        "question": "Как называется процесс разбиения текста на маленькие фрагменты для модели?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["Токенизация", "Компиляция", "Индексация", "Сериализация"],
-        "matchPairs": [],
-        "correctAnswer": "Токенизация",
-        "explanation": "Токенизация превращает текст в последовательность токенов, понятных модели.",
-        "hints": ["Термин образован от слова 'token'."]
-      },
-      {
-        "id": "aihow_e2",
-        "type": "multipleChoice",
-        "question": "Что происходит с температурой (temperature) генерации при увеличении её значения?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Ответы становятся более разнообразными и менее предсказуемыми",
-          "Модель начинает искать в интернете",
-          "Скорость генерации увеличивается",
-          "Модель начинает использовать больше токенов контекста"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Ответы становятся более разнообразными и менее предсказуемыми",
-        "explanation": "Более высокая температура увеличивает случайность выбора следующего токена.",
-        "hints": ["Температура влияет на 'случайность' выбора слов моделью."]
-      }
-    ]
-  },
-  {
-    "id": "ai_prompt_engineering_l1",
-    "title": "Prompt Engineering",
-    "description": "Как формулировать запросы, чтобы получать лучшие ответы от AI.",
-    "topicId": "ai_prompt_engineering",
-    "courseId": "ai_track",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aipe_e1",
-        "type": "multipleChoice",
-        "question": "Какой из этих промптов сформулирован лучше для получения структурированного ответа?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": [
-          "Напиши план урока по теме 'циклы' для новичков, в виде списка из 5 пунктов",
-          "расскажи про циклы",
-          "циклы?",
-          "сделай что-нибудь про программирование"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Напиши план урока по теме 'циклы' для новичков, в виде списка из 5 пунктов",
-        "explanation": "Чёткий промпт указывает тему, аудиторию и формат ответа.",
-        "hints": ["Хороший промпт обычно включает конкретную задачу, контекст и желаемый формат."]
-      },
-      {
-        "id": "aipe_e2",
-        "type": "multipleChoice",
-        "question": "Пользователю нужно, чтобы AI анализировал тональность отзывов клиентов. Какой промпт эффективнее?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Проанализируй тональность каждого отзыва ниже и классифицируй как positive/neutral/negative, верни результат в формате JSON",
-          "Что думаешь про эти отзывы?",
-          "Отзывы хорошие или плохие?",
-          "Сделай отчёт"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Проанализируй тональность каждого отзыва ниже и классифицируй как positive/neutral/negative, верни результат в формате JSON",
-        "explanation": "Указание точной задачи, категорий и формата вывода даёт предсказуемый, обрабатываемый результат.",
-        "hints": ["Ищи промпт, который явно указывает и задачу, и формат ответа."]
-      }
-    ]
-  },
-  {
-    "id": "ai_system_user_prompts_l1",
-    "title": "System / User Prompts",
-    "description": "Разница между system и user промптами и зачем она нужна.",
-    "topicId": "ai_system_user_prompts",
-    "courseId": "ai_track",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aisu_e1",
-        "type": "multipleChoice",
-        "question": "Для чего в первую очередь используется system prompt?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": [
-          "Задать общее поведение, роль и правила для модели на весь диалог",
-          "Передать разовый вопрос пользователя",
-          "Хранить историю переписки",
-          "Ускорить генерацию ответа"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Задать общее поведение, роль и правила для модели на весь диалог",
-        "explanation": "System prompt задаёт устойчивый контекст и правила, а user prompt — конкретный запрос.",
-        "hints": ["System prompt обычно устанавливается один раз и держит модель 'в роли'."]
-      },
-      {
-        "id": "aisu_e2",
-        "type": "matchPairs",
-        "question": "Сопоставь тип промпта с его назначением.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [
-          {"left": "System prompt", "right": "Задаёт роль и правила для всей сессии"},
-          {"left": "User prompt", "right": "Конкретный вопрос или задача от пользователя"},
-          {"left": "Few-shot examples", "right": "Примеры, показывающие модели ожидаемый формат ответа"}
-        ],
-        "correctAnswer": null,
-        "explanation": "Комбинация всех трёх элементов часто даёт наиболее предсказуемый результат.",
-        "hints": ["Подумай, что задаёт долгосрочный контекст, а что — разовый запрос."]
-      }
-    ]
-  },
-  {
-    "id": "ai_few_shot_l1",
-    "title": "Few-shot Prompting",
-    "description": "Как примеры в промпте улучшают качество ответа модели.",
-    "topicId": "ai_few_shot",
-    "courseId": "ai_track",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aifs_e1",
-        "type": "multipleChoice",
-        "question": "Что такое few-shot prompting?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": [
-          "Добавление нескольких примеров формата ответа прямо в промпт",
-          "Отправка нескольких промптов подряд без ответа",
-          "Ограничение длины ответа модели",
-          "Использование только коротких промптов"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Добавление нескольких примеров формата ответа прямо в промпт",
-        "explanation": "Few-shot prompting показывает модели 2-3 примера 'вопрос-ответ', чтобы задать шаблон.",
-        "hints": ["'Few-shot' буквально значит 'несколько примеров'."]
-      },
-      {
-        "id": "aifs_e2",
-        "type": "multipleChoice",
-        "question": "Когда few-shot prompting особенно полезен?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Когда нужен специфический или нестандартный формат ответа",
-          "Когда вопрос предельно простой и однозначный",
-          "Когда модель не поддерживает system prompt",
-          "Всегда, независимо от задачи"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Когда нужен специфический или нестандартный формат ответа",
-        "explanation": "Примеры особенно помогают, когда словесное описание формата неоднозначно.",
-        "hints": ["Подумай, когда примеры полезнее простого текстового объяснения."]
-      }
-    ]
-  },
-  {
-    "id": "ai_structured_output_l1",
-    "title": "Structured Output",
-    "description": "Получение JSON и других структурированных форматов от AI.",
-    "topicId": "ai_structured_output",
-    "courseId": "ai_track",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aiso_e1",
-        "type": "multipleChoice",
-        "question": "Зачем просить модель возвращать ответ в формате JSON?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": [
-          "Чтобы ответ можно было легко и надёжно распарсить программно",
-          "Чтобы ответ был короче",
-          "Чтобы модель отвечала быстрее",
-          "JSON не имеет практического смысла для AI"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Чтобы ответ можно было легко и надёжно распарсить программно",
-        "explanation": "Структурированный вывод убирает неоднозначность при интеграции ответа AI в приложение.",
-        "hints": ["Подумай о том, как приложение будет использовать ответ модели дальше."]
-      },
-      {
-        "id": "aiso_e2",
-        "type": "findTheBug",
-        "question": "В этом JSON-ответе модели есть синтаксическая ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "{\n  \"title\": \"Урок\",\n  \"difficulty\": \"easy\"\n  \"topic\": \"loops\"\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  \"difficulty\": \"easy\"",
-        "explanation": "Между полями JSON-объекта пропущена запятая.",
-        "hints": ["В JSON между парами ключ-значение должна стоять запятая."]
-      }
-    ]
-  },
-  {
-    "id": "ai_working_with_apis_l1",
-    "title": "Работа с API",
-    "description": "Как приложения обращаются к AI через API: запросы и ответы.",
-    "topicId": "ai_working_with_apis",
-    "courseId": "ai_track",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aiapi_e1",
-        "type": "multipleChoice",
-        "question": "Что обычно происходит, если у AI-провайдера закончилась квота запросов?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": [
-          "API возвращает ошибку, и хорошо спроектированное приложение переключается на резервный provider",
-          "Приложение автоматически останавливается навсегда",
-          "Ответ всегда приходит, но с задержкой в сутки",
-          "Это невозможно определить программно"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "API возвращает ошибку, и хорошо спроектированное приложение переключается на резервный provider",
-        "explanation": "Именно так работает fallback-система: при ошибке основного provider используется запасной.",
-        "hints": ["Подумай про принцип fallback, который используется в этом самом приложении."]
-      },
-      {
-        "id": "aiapi_e2",
-        "type": "multipleChoice",
-        "question": "Почему API-ключи не следует хранить прямо в коде клиентского приложения?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Скомпилированное приложение можно проанализировать и извлечь ключи",
-          "Это замедляет работу приложения",
-          "API-ключи занимают слишком много места",
-          "Это требование только для мобильных приложений на Android"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Скомпилированное приложение можно проанализировать и извлечь ключи",
-        "explanation": "APK/IPA можно декомпилировать, поэтому секреты внутри клиента не защищены.",
-        "hints": ["Подумай о том, что происходит с приложением после того, как пользователь его скачивает."]
-      }
-    ]
-  },
-  {
-    "id": "ai_agents_l1",
-    "title": "AI Agents",
-    "description": "Что такое AI-агенты и чем они отличаются от обычного чат-бота.",
-    "topicId": "ai_agents",
-    "courseId": "ai_track",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "aiag_e1",
-        "type": "multipleChoice",
-        "question": "Чем AI-агент принципиально отличается от простого чат-бота?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Агент может самостоятельно вызывать инструменты и совершать несколько шагов для достижения цели",
-          "Агент всегда отвечает быстрее",
-          "Агент не использует языковую модель",
-          "Агент работает только offline"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Агент может самостоятельно вызывать инструменты и совершать несколько шагов для достижения цели",
-        "explanation": "Агенты планируют и выполняют последовательности действий, используя инструменты, а не просто отвечают текстом.",
-        "hints": ["Подумай про разницу между 'ответить одним сообщением' и 'выполнить многошаговую задачу'."]
-      },
-      {
-        "id": "aiag_e2",
-        "type": "multipleChoice",
-        "question": "Какой пример лучше всего описывает задачу для AI-агента?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [
-          "Найти лучший рейс, забронировать его и отправить подтверждение на почту",
-          "Перевести одно предложение на английский",
-          "Ответить, сколько будет 2+2",
-          "Объяснить, что такое переменная"
-        ],
-        "matchPairs": [],
-        "correctAnswer": "Найти лучший рейс, забронировать его и отправить подтверждение на почту",
-        "explanation": "Это многошаговая задача с использованием нескольких инструментов — типичный сценарий для агента.",
-        "hints": ["Ищи задачу, которая требует несколько последовательных действий и инструментов."]
-      }
-    ]
-  }
-]
+{
+  "id": "ai_track",
+  "track": "ai",
+  "title": "AI & Prompt Engineering",
+  "description": "Как устроены современные AI-модели и как эффективно с ними работать.",
+  "iconName": "code",
+  "colorSeed": "#8B5CF6",
+  "isAvailable": true,
+  "comingSoon": false,
+  "topics": [
+    {
+      "id": "ai_basics",
+      "courseId": "ai_track",
+      "title": "Основы AI",
+      "orderIndex": 0,
+      "iconName": "variable",
+      "lessonIds": ["ai_basics_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": []
+    },
+    {
+      "id": "ai_how_llms_work",
+      "courseId": "ai_track",
+      "title": "Как работают LLM",
+      "orderIndex": 1,
+      "iconName": "function",
+      "lessonIds": ["ai_how_llms_work_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["ai_basics"]
+    },
+    {
+      "id": "ai_prompt_engineering",
+      "courseId": "ai_track",
+      "title": "Prompt Engineering",
+      "orderIndex": 2,
+      "iconName": "text",
+      "lessonIds": ["ai_prompt_engineering_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["ai_how_llms_work"]
+    },
+    {
+      "id": "ai_system_user_prompts",
+      "courseId": "ai_track",
+      "title": "System / User Prompts",
+      "orderIndex": 3,
+      "iconName": "condition",
+      "lessonIds": ["ai_system_user_prompts_l1"],
+      "miniProjectId": "ai_project_review_prompt",
+      "prerequisiteTopicIds": ["ai_prompt_engineering"]
+    },
+    {
+      "id": "ai_project_review_prompt",
+      "courseId": "ai_track",
+      "title": "Mini Project",
+      "orderIndex": 4,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "ai_project_review_prompt",
+      "prerequisiteTopicIds": ["ai_system_user_prompts"]
+    },
+    {
+      "id": "ai_few_shot",
+      "courseId": "ai_track",
+      "title": "Few-shot Prompting",
+      "orderIndex": 5,
+      "iconName": "list",
+      "lessonIds": ["ai_few_shot_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["ai_project_review_prompt"]
+    },
+    {
+      "id": "ai_structured_output",
+      "courseId": "ai_track",
+      "title": "Structured Output",
+      "orderIndex": 6,
+      "iconName": "dict",
+      "lessonIds": ["ai_structured_output_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["ai_few_shot"]
+    },
+    {
+      "id": "ai_working_with_apis",
+      "courseId": "ai_track",
+      "title": "Работа с API",
+      "orderIndex": 7,
+      "iconName": "loop",
+      "lessonIds": ["ai_working_with_apis_l1"],
+      "miniProjectId": "ai_project_automation",
+      "prerequisiteTopicIds": ["ai_structured_output"]
+    },
+    {
+      "id": "ai_project_automation",
+      "courseId": "ai_track",
+      "title": "Mini Project",
+      "orderIndex": 8,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "ai_project_automation",
+      "prerequisiteTopicIds": ["ai_working_with_apis"]
+    },
+    {
+      "id": "ai_agents",
+      "courseId": "ai_track",
+      "title": "AI Agents",
+      "orderIndex": 9,
+      "iconName": "oop",
+      "lessonIds": ["ai_agents_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["ai_project_automation"]
+    }
+  ]
+}

@@ -1,324 +1,92 @@
-[
-  {
-    "id": "dart_variables_l1",
-    "title": "Variables",
-    "description": "Объявление переменных через var, final и const.",
-    "topicId": "dart_variables",
-    "courseId": "dart",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "dv_e1",
-        "type": "multipleChoice",
-        "question": "Какое ключевое слово создаёт переменную, значение которой нельзя изменить после инициализации?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["final", "var", "dynamic", "mutable"],
-        "matchPairs": [],
-        "correctAnswer": "final",
-        "explanation": "final означает, что переменная присваивается один раз и больше не меняется.",
-        "hints": ["var можно переприсваивать, а final — нет."]
-      },
-      {
-        "id": "dv_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "var x = 10;\nx = x + 5;\nprint(x);",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "15",
-        "explanation": "var позволяет переприсваивать значение, поэтому x становится 15.",
-        "hints": ["var — изменяемая переменная, в отличие от final."]
-      },
-      {
-        "id": "dv_e3",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "final age = 20;\nage = 21;\nprint(age);",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "age = 21;",
-        "explanation": "final нельзя переприсваивать после инициализации.",
-        "hints": ["Переменные final присваиваются только один раз."]
-      },
-      {
-        "id": "dv_e4",
-        "type": "writeCode",
-        "question": "Объяви переменную city типа String с любым городом и выведи её.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "String city = \"Yerevan\";\nprint(city);",
-        "explanation": "Dart позволяет явно указывать тип переменной перед именем.",
-        "hints": ["Можно указать тип String явно перед именем переменной."]
-      }
-    ]
-  },
-  {
-    "id": "dart_types_l1",
-    "title": "Types",
-    "description": "Основные типы данных в Dart: int, double, String, bool.",
-    "topicId": "dart_types",
-    "courseId": "dart",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "dt_e1",
-        "type": "multipleChoice",
-        "question": "Какой тип данных используется для чисел с плавающей точкой в Dart?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["double", "float", "decimal", "number"],
-        "matchPairs": [],
-        "correctAnswer": "double",
-        "explanation": "В Dart дробные числа представлены типом double.",
-        "hints": ["Это не float, как в некоторых других языках."]
-      },
-      {
-        "id": "dt_e2",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "int a = 7;\ndouble b = a / 2;\nprint(b);",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "3.5",
-        "explanation": "Оператор / в Dart всегда возвращает double, даже при делении целых чисел.",
-        "hints": ["/ в Dart всегда даёт дробный результат."]
-      },
-      {
-        "id": "dt_e3",
-        "type": "matchPairs",
-        "question": "Сопоставь тип данных с примером значения.",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [
-          {"left": "int", "right": "42"},
-          {"left": "String", "right": "\"hello\""},
-          {"left": "bool", "right": "true"}
-        ],
-        "correctAnswer": null,
-        "explanation": "Каждый базовый тип Dart соответствует определённому виду значения.",
-        "hints": ["Подумай, какой тип подходит для каждого примера значения."]
-      },
-      {
-        "id": "dt_e4",
-        "type": "writeCode",
-        "question": "Объяви переменную isReady типа bool со значением true и выведи её.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "bool isReady = true;\nprint(isReady);",
-        "explanation": "bool хранит логическое значение true или false.",
-        "hints": ["Тип для логических значений — bool."]
-      }
-    ]
-  },
-  {
-    "id": "dart_functions_l1",
-    "title": "Functions",
-    "description": "Объявление функций с типами параметров и возврата.",
-    "topicId": "dart_functions",
-    "courseId": "dart",
-    "difficulty": "beginner",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "df_e1",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "int square(int x) {\n  return x * x;\n}\n\nvoid main() {\n  print(square(4));\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "16",
-        "explanation": "Функция square возводит число в квадрат: 4 * 4 = 16.",
-        "hints": ["Функция возвращает x умноженное на x."]
-      },
-      {
-        "id": "df_e2",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка типов. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "int add(int a, int b) {\n  return a + b;\n}\n\nvoid main() {\n  print(add(2, \"3\"));\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  print(add(2, \"3\"));",
-        "explanation": "Функция ожидает int, а передана строка \"3\" — несовпадение типов.",
-        "hints": ["Функция add принимает только int, а не String."]
-      },
-      {
-        "id": "df_e3",
-        "type": "writeCode",
-        "question": "Напиши функцию isEven(int n), которая возвращает bool: true, если число чётное.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "bool isEven(int n) {\n  return n % 2 == 0;\n}",
-        "explanation": "Выражение n % 2 == 0 само по себе уже bool.",
-        "hints": ["Тип возвращаемого значения должен быть bool.", "n % 2 == 0 истинно для чётных чисел."]
-      }
-    ]
-  },
-  {
-    "id": "dart_classes_l1",
-    "title": "Classes",
-    "description": "Классы и объекты в Dart.",
-    "topicId": "dart_classes",
-    "courseId": "dart",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "dc_e1",
-        "type": "predictOutput",
-        "question": "Что выведет этот код?",
-        "difficulty": "medium",
-        "codeSnippet": "class Dog {\n  String name;\n  Dog(this.name);\n}\n\nvoid main() {\n  var d = Dog(\"Rex\");\n  print(d.name);\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Rex",
-        "explanation": "Конструктор Dog(this.name) сразу присваивает переданное значение полю name.",
-        "hints": ["this.name в конструкторе — это сокращённая запись присваивания."]
-      },
-      {
-        "id": "dc_e2",
-        "type": "findTheBug",
-        "question": "В этом коде есть ошибка. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "class Cat {\n  String name;\n  Cat(name) {\n    this.name = name;\n  }\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  Cat(name) {",
-        "explanation": "Параметр конструктора должен иметь тип, например String name.",
-        "hints": ["У параметра конструктора отсутствует тип."]
-      },
-      {
-        "id": "dc_e3",
-        "type": "writeCode",
-        "question": "Напиши класс Book с полями title и author и конструктором.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "class Book {\n  String title;\n  String author;\n  Book(this.title, this.author);\n}",
-        "explanation": "this.title и this.author — короткая форма конструктора, присваивающая поля напрямую.",
-        "hints": ["Используй сокращённую форму конструктора: Book(this.title, this.author)."]
-      }
-    ]
-  },
-  {
-    "id": "dart_async_l1",
-    "title": "Async",
-    "description": "Асинхронность: Future, async и await.",
-    "topicId": "dart_async",
-    "courseId": "dart",
-    "difficulty": "intermediate",
-    "orderIndex": 0,
-    "xpReward": 30,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "da_e1",
-        "type": "multipleChoice",
-        "question": "Какой тип возвращает асинхронная функция в Dart?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["Future", "Promise", "Task", "Async"],
-        "matchPairs": [],
-        "correctAnswer": "Future",
-        "explanation": "В Dart асинхронные операции представлены типом Future<T>.",
-        "hints": ["В JavaScript это Promise, а в Dart другое слово."]
-      },
-      {
-        "id": "da_e2",
-        "type": "codeCompletion",
-        "question": "Дополни код, чтобы дождаться результата асинхронной функции.",
-        "difficulty": "medium",
-        "codeSnippet": "Future<void> main() async {\n  var result = ____ fetchData();\n  print(result);\n}",
-        "options": ["await", "async", "yield", "then"],
-        "matchPairs": [],
-        "correctAnswer": "await",
-        "explanation": "await приостанавливает выполнение до завершения Future.",
-        "hints": ["Это ключевое слово используется внутри async-функции для ожидания результата."]
-      },
-      {
-        "id": "da_e3",
-        "type": "writeCode",
-        "question": "Напиши асинхронную функцию loadUser(), которая возвращает Future<String> со значением 'Alex'.",
-        "difficulty": "hard",
-        "codeSnippet": null,
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "Future<String> loadUser() async {\n  return \"Alex\";\n}",
-        "explanation": "Функция помечена async и возвращает Future<String>.",
-        "hints": ["Тип возвращаемого значения — Future<String>, а функция помечена async."]
-      }
-    ]
-  },
-  {
-    "id": "dart_flutter_basics_l1",
-    "title": "Flutter Basics",
-    "description": "Базовые понятия Flutter: виджеты, State, дерево виджетов.",
-    "topicId": "dart_flutter_basics",
-    "courseId": "dart",
-    "difficulty": "advanced",
-    "orderIndex": 0,
-    "xpReward": 35,
-    "isAiGenerated": false,
-    "exercises": [
-      {
-        "id": "dfb_e1",
-        "type": "multipleChoice",
-        "question": "Как называется базовый строительный блок интерфейса во Flutter?",
-        "difficulty": "easy",
-        "codeSnippet": null,
-        "options": ["Widget", "Component", "View", "Element"],
-        "matchPairs": [],
-        "correctAnswer": "Widget",
-        "explanation": "Во Flutter весь интерфейс строится из виджетов (Widget).",
-        "hints": ["Это слово в названии самого фреймворка используется постоянно."]
-      },
-      {
-        "id": "dfb_e2",
-        "type": "multipleChoice",
-        "question": "Какой виджет используется для хранения изменяемого состояния?",
-        "difficulty": "medium",
-        "codeSnippet": null,
-        "options": ["StatefulWidget", "StatelessWidget", "InheritedWidget", "ConstWidget"],
-        "matchPairs": [],
-        "correctAnswer": "StatefulWidget",
-        "explanation": "StatefulWidget хранит State, который может меняться со временем.",
-        "hints": ["Название виджета прямо говорит о наличии состояния."]
-      },
-      {
-        "id": "dfb_e3",
-        "type": "findTheBug",
-        "question": "В этом коде забыли вызвать setState. Найди строку с багом.",
-        "difficulty": "medium",
-        "codeSnippet": "int counter = 0;\n\nvoid increment() {\n  counter = counter + 1;\n}",
-        "options": [],
-        "matchPairs": [],
-        "correctAnswer": "  counter = counter + 1;",
-        "explanation": "Без setState() Flutter не перерисует экран после изменения counter.",
-        "hints": ["Изменение состояния должно быть обёрнуто в setState(), чтобы UI обновился."]
-      }
-    ]
-  }
-]
+{
+  "id": "dart",
+  "track": "programming",
+  "title": "Dart",
+  "description": "Язык Flutter: от переменных до асинхронности и основ Flutter.",
+  "iconName": "code",
+  "colorSeed": "#0175C2",
+  "isAvailable": true,
+  "comingSoon": false,
+  "topics": [
+    {
+      "id": "dart_variables",
+      "courseId": "dart",
+      "title": "Variables",
+      "orderIndex": 0,
+      "iconName": "variable",
+      "lessonIds": ["dart_variables_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": []
+    },
+    {
+      "id": "dart_types",
+      "courseId": "dart",
+      "title": "Types",
+      "orderIndex": 1,
+      "iconName": "number",
+      "lessonIds": ["dart_types_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["dart_variables"]
+    },
+    {
+      "id": "dart_functions",
+      "courseId": "dart",
+      "title": "Functions",
+      "orderIndex": 2,
+      "iconName": "function",
+      "lessonIds": ["dart_functions_l1"],
+      "miniProjectId": "dart_project_functions",
+      "prerequisiteTopicIds": ["dart_types"]
+    },
+    {
+      "id": "dart_project_functions",
+      "courseId": "dart",
+      "title": "Mini Project",
+      "orderIndex": 3,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "dart_project_functions",
+      "prerequisiteTopicIds": ["dart_functions"]
+    },
+    {
+      "id": "dart_classes",
+      "courseId": "dart",
+      "title": "Classes",
+      "orderIndex": 4,
+      "iconName": "oop",
+      "lessonIds": ["dart_classes_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["dart_project_functions"]
+    },
+    {
+      "id": "dart_async",
+      "courseId": "dart",
+      "title": "Async",
+      "orderIndex": 5,
+      "iconName": "loop",
+      "lessonIds": ["dart_async_l1"],
+      "miniProjectId": "dart_project_async",
+      "prerequisiteTopicIds": ["dart_classes"]
+    },
+    {
+      "id": "dart_project_async",
+      "courseId": "dart",
+      "title": "Mini Project",
+      "orderIndex": 6,
+      "iconName": "project",
+      "lessonIds": [],
+      "miniProjectId": "dart_project_async",
+      "prerequisiteTopicIds": ["dart_async"]
+    },
+    {
+      "id": "dart_flutter_basics",
+      "courseId": "dart",
+      "title": "Flutter Basics",
+      "orderIndex": 7,
+      "iconName": "text",
+      "lessonIds": ["dart_flutter_basics_l1"],
+      "miniProjectId": null,
+      "prerequisiteTopicIds": ["dart_project_async"]
+    }
+  ]
+}
