@@ -10,7 +10,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/course.dart';
 import '../../../models/user_progress.dart';
-import '../../../shared/widgets/topic_node_widget.dart';
+import '../../../shared/widgets/map_node_widget.dart';
+import '../application/map_node_resolver.dart';
 
 /// Resolves a [Course] (with live topic statuses) for a given courseId,
 /// re-computed whenever [userProgressProvider] changes.
@@ -24,11 +25,16 @@ final FutureProviderFamily<Course?, String> resolvedCourseProvider =
 });
 
 /// The winding vertical course map: a centered, alternating-offset path
-/// of [TopicNodeWidget]s connected by smooth curved segments (painted by
-/// [_PathPainter]), matching the product spec's "path with nodes"
-/// reference sketch. Each topic node opens the first lesson in that
-/// topic the user hasn't completed yet, or the topic's mini-project once
-/// all lessons are done.
+/// matching the product spec's "path with nodes" reference sketch.
+///
+/// IMPORTANT: the path is drawn at *lesson/mini-project* granularity, not
+/// per-topic. A topic that bundles e.g. 3 lessons and a mini-project
+/// renders as 4 independent nodes, each with its own id, its own status
+/// resolved straight from [UserProgress]'s per-lesson/per-project
+/// completion sets, and its own tap behavior. This is what lets a
+/// mini-project appear separately from — and unlock independently of —
+/// the lessons that precede it; see [resolveMapNodes] for the resolution
+/// rules and [_onNodeTap] for the navigation rules.
 class CourseMapScreen extends ConsumerWidget {
   const CourseMapScreen({required this.courseId, super.key});
 
@@ -57,10 +63,17 @@ class CourseMapScreen extends ConsumerWidget {
               child: Text('Темы скоро появятся', style: text.bodyLarge),
             );
           }
-          final Set<String> completedLessonIds =
-              ref.watch(userProgressProvider).valueOrNull?.completedLessonIds ??
-                  const <String>{};
-          return _MapBody(course: course, completedLessonIds: completedLessonIds);
+          final UserProgress? progress = ref.watch(userProgressProvider).valueOrNull;
+          if (progress == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final List<MapNode> nodes = resolveMapNodes(course, progress);
+          if (nodes.isEmpty) {
+            return Center(
+              child: Text('Темы скоро появятся', style: text.bodyLarge),
+            );
+          }
+          return _MapBody(course: course, nodes: nodes);
         },
       ),
     );
@@ -76,17 +89,16 @@ const double _kConnectorHeight = 56.0;
 const double _kRowHeight = _kNodeSize + _kConnectorHeight;
 
 class _MapBody extends StatelessWidget {
-  const _MapBody({required this.course, required this.completedLessonIds});
+  const _MapBody({required this.course, required this.nodes});
   final Course course;
-  final Set<String> completedLessonIds;
+  final List<MapNode> nodes;
 
   @override
   Widget build(BuildContext context) {
     final Color accent = AppColors.fromHex(course.colorSeed);
-    final List<TopicNode> topics = List<TopicNode>.from(course.topics)
-      ..sort((TopicNode a, TopicNode b) => a.orderIndex.compareTo(b.orderIndex));
 
-    final double contentHeight = _kNodeSize + (topics.length - 1) * _kRowHeight + 56;
+    final int rowCount = nodes.isEmpty ? 0 : nodes.length - 1;
+    final double contentHeight = _kNodeSize + rowCount * _kRowHeight + 56;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -105,10 +117,10 @@ class _MapBody extends StatelessWidget {
                 CustomPaint(
                   size: Size(constraints.maxWidth, contentHeight),
                   painter: _PathPainter(
-                    nodeCount: topics.length,
+                    nodeCount: nodes.length,
                     centerX: centerX,
                     completedFlags: <bool>[
-                      for (final TopicNode t in topics) t.status == TopicNodeStatus.completed,
+                      for (final MapNode n in nodes) n.status == MapNodeStatus.completed,
                     ],
                     accent: accent,
                     inactiveColor: Theme.of(context)
@@ -116,17 +128,17 @@ class _MapBody extends StatelessWidget {
                         .border,
                   ),
                 ),
-                for (int i = 0; i < topics.length; i++)
+                for (int i = 0; i < nodes.length; i++)
                   Positioned(
                     top: i * _kRowHeight,
                     left: centerX + _laneOffset(i) - _kNodeSize / 2,
                     width: _kNodeSize + 48,
                     child: Center(
-                      child: TopicNodeWidget(
-                        topic: topics[i],
+                      child: MapNodeWidget(
+                        node: nodes[i],
                         accentColor: accent,
                         size: _kNodeSize,
-                        onTap: () => _openTopic(context, topics[i]),
+                        onTap: _onNodeTap(context, nodes[i]),
                       ),
                     ).animate().fadeIn(delay: (i * 60).ms, duration: 300.ms).slideY(begin: 0.08, end: 0),
                   ),
@@ -143,39 +155,38 @@ class _MapBody extends StatelessWidget {
   /// instead of drifting toward one edge.
   double _laneOffset(int index) => (index.isEven ? -1 : 1) * _kNodeOffset;
 
-  void _openTopic(BuildContext context, TopicNode topic) {
-    final String? nextLessonId = _firstIncompleteLessonId(topic);
+  /// Returns the tap handler for [node], or null when the node must not
+  /// react to taps at all.
+  ///
+  /// This is the single place navigation is decided, and it dispatches
+  /// strictly on the tapped node's own id + type + status:
+  ///   - locked                            -> null (no-op)
+  ///   - completed                         -> null (no-op; a completed
+  ///                                          node is history, it never
+  ///                                          re-opens itself or anything
+  ///                                          else)
+  ///   - available/inProgress lesson       -> open that exact lesson id
+  ///   - available/inProgress mini-project -> open that exact project id
+  ///
+  /// There is deliberately no "open the next node" fallback anywhere in
+  /// this method — each node only ever knows how to open itself.
+  VoidCallback? _onNodeTap(BuildContext context, MapNode node) {
+    if (!node.isInteractive) return null;
 
-    // A topic whose lessons are all done, but which still has an
-    // un-started mini-project, opens the project directly.
-    if (nextLessonId == null && topic.miniProjectId != null) {
-      context.push(AppRoutes.miniProjectPath(topic.miniProjectId!, topicId: topic.id));
-      return;
+    switch (node.type) {
+      case MapNodeType.lesson:
+        return () => context.push(
+              AppRoutes.lessonPath(node.id, courseId: node.courseId, topicId: node.topicId),
+            );
+      case MapNodeType.miniProject:
+        return () => context.push(
+              AppRoutes.miniProjectPath(node.id, topicId: node.topicId),
+            );
     }
-
-    if (nextLessonId != null) {
-      context.push(
-        AppRoutes.lessonPath(nextLessonId, courseId: topic.courseId, topicId: topic.id),
-      );
-    } else if (topic.miniProjectId != null) {
-      context.push(AppRoutes.miniProjectPath(topic.miniProjectId!, topicId: topic.id));
-    }
-  }
-
-  /// The first lesson in [topic] the user hasn't completed yet, so
-  /// re-opening a topic resumes progress instead of restarting lesson 1
-  /// every time. Returns null once every lesson in the topic is done.
-  String? _firstIncompleteLessonId(TopicNode topic) {
-    for (final String lessonId in topic.lessonIds) {
-      if (!completedLessonIds.contains(lessonId)) {
-        return lessonId;
-      }
-    }
-    return null;
   }
 }
 
-/// Paints the smooth connecting path between topic nodes, following the
+/// Paints the smooth connecting path between map nodes, following the
 /// same alternating offsets used to position the nodes themselves so
 /// each segment visually starts and ends exactly at a node's center.
 class _PathPainter extends CustomPainter {
