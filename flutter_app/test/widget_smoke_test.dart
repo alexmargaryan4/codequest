@@ -16,16 +16,26 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('CodeQuestApp builds without throwing', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(child: CodeQuestApp()),
-    );
+  testWidgets(
+    'CodeQuestApp builds without throwing',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const ProviderScope(child: CodeQuestApp()),
+      );
 
-    // Let the first frame (and onboarding/home routing) settle.
-    await tester.pump(const Duration(milliseconds: 500));
+      // Let the first frame (and onboarding/home routing) settle.
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // The app should have rendered a MaterialApp-backed widget tree
-    // without throwing during build.
-    expect(find.byType(MaterialApp), findsOneWidget);
-  });
+      // The app should have rendered a MaterialApp-backed widget tree
+      // without throwing during build.
+      expect(find.byType(MaterialApp), findsOneWidget);
+    },
+    // A per-test ceiling so a genuine hang (e.g. native SQLite/FFI
+    // blocking instead of throwing on a CI runner) fails this specific
+    // test with a clear "test timed out" message pointing at this file,
+    // instead of the whole `flutter test` process sitting there until
+    // the surrounding CI job's own timeout (or GitHub's 6-hour default)
+    // finally kills it with no indication of where it got stuck.
+    timeout: const Timeout(Duration(seconds: 30)),
+  );
 }
