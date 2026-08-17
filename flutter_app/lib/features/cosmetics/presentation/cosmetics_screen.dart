@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/cosmetics_state.dart';
 import '../../../models/gems_wallet.dart';
+import '../../../services/cosmetics_service.dart';
 
 class CosmeticsScreen extends ConsumerWidget {
   const CosmeticsScreen({super.key});
