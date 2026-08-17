@@ -3,18 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/achievements/presentation/achievements_screen.dart';
+import '../../features/chest/presentation/daily_chest_screen.dart';
+import '../../features/cosmetics/presentation/cosmetics_screen.dart';
 import '../../features/course_map/presentation/course_map_screen.dart';
 import '../../features/daily_challenge/presentation/daily_challenge_screen.dart';
+import '../../features/duel/presentation/duel_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/leaderboard/presentation/leaderboard_screen.dart';
 import '../../features/learn/presentation/learn_screen.dart';
 import '../../features/lesson/presentation/lesson_screen.dart';
 import '../../features/mini_project/presentation/mini_project_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/pet/presentation/pet_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/quests/presentation/weekly_quests_screen.dart';
 import '../../features/shop/presentation/shop_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
+import '../../features/weekly_report/presentation/weekly_report_screen.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../providers/settings_provider.dart';
 
@@ -42,6 +47,11 @@ class AppRoutes {
   static const String dailyChallenge = '/daily-challenge';
   static const String shop = '/shop';
   static const String weeklyQuests = '/quests';
+  static const String dailyChest = '/chest';
+  static const String pet = '/pet';
+  static const String duel = '/duel';
+  static const String cosmetics = '/cosmetics';
+  static const String weeklyReport = '/weekly-report';
 
   static String courseMapPath(String courseId) => '/learn/$courseId';
   static String lessonPath(String lessonId, {required String courseId, required String topicId}) =>
@@ -153,6 +163,26 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref ref) {
       GoRoute(
         path: AppRoutes.weeklyQuests,
         builder: (BuildContext context, GoRouterState state) => const WeeklyQuestsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.dailyChest,
+        builder: (BuildContext context, GoRouterState state) => const DailyChestScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.pet,
+        builder: (BuildContext context, GoRouterState state) => const PetScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.duel,
+        builder: (BuildContext context, GoRouterState state) => const DuelScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.cosmetics,
+        builder: (BuildContext context, GoRouterState state) => const CosmeticsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.weeklyReport,
+        builder: (BuildContext context, GoRouterState state) => const WeeklyReportScreen(),
       ),
     ],
   );

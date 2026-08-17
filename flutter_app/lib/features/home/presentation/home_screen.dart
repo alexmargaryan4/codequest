@@ -3,8 +3,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/chest_provider.dart';
+import '../../../core/providers/duel_provider.dart';
 import '../../../core/providers/gems_provider.dart';
 import '../../../core/providers/hearts_provider.dart';
+import '../../../core/providers/pet_provider.dart';
 import '../../../core/providers/progress_provider.dart';
 import '../../../core/providers/quest_provider.dart';
 import '../../../core/router/app_router.dart';
@@ -12,8 +15,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/course.dart';
 import '../../../models/daily_challenge.dart';
+import '../../../models/daily_chest.dart';
+import '../../../models/duel.dart';
 import '../../../models/gems_wallet.dart';
 import '../../../models/hearts_state.dart';
+import '../../../models/pet_companion.dart';
 import '../../../models/user_progress.dart';
 import '../../../models/weekly_quest.dart';
 import '../../../shared/widgets/gems_badge.dart';
@@ -140,6 +146,53 @@ class HomeScreen extends ConsumerWidget {
                             ref.watch(dailyChallengeProvider);
                         return challengeAsync.maybeWhen(
                           data: (DailyChallenge c) => _DailyChallengeCard(challenge: c),
+                          orElse: () => const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Consumer(
+                            builder: (BuildContext context, WidgetRef ref, _) {
+                              final AsyncValue<DailyChestState> chestAsync =
+                                  ref.watch(chestProvider);
+                              return chestAsync.maybeWhen(
+                                data: (DailyChestState chest) => _ChestMiniCard(chest: chest),
+                                orElse: () => const SizedBox.shrink(),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Consumer(
+                            builder: (BuildContext context, WidgetRef ref, _) {
+                              final AsyncValue<PetCompanion> petAsync = ref.watch(petProvider);
+                              return petAsync.maybeWhen(
+                                data: (PetCompanion pet) => _PetMiniCard(pet: pet),
+                                orElse: () => const SizedBox.shrink(),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  sliver: SliverToBoxAdapter(
+                    child: Consumer(
+                      builder: (BuildContext context, WidgetRef ref, _) {
+                        final AsyncValue<Duel> duelAsync = ref.watch(duelProvider);
+                        return duelAsync.maybeWhen(
+                          data: (Duel duel) => _DuelMiniCard(duel: duel),
                           orElse: () => const SizedBox.shrink(),
                         );
                       },
@@ -423,6 +476,162 @@ class _WeeklyQuestsCard extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _ChestMiniCard extends StatelessWidget {
+  const _ChestMiniCard({required this.chest});
+  final DailyChestState chest;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final bool available = chest.isAvailableToday;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      onTap: () => context.push(AppRoutes.dailyChest),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: available
+                ? <Color>[
+                    AppColors.streakAmber.withValues(alpha: 0.18),
+                    AppColors.streakAmber.withValues(alpha: 0.06),
+                  ]
+                : <Color>[
+                    AppColors.streakAmber.withValues(alpha: 0.08),
+                    AppColors.streakAmber.withValues(alpha: 0.02),
+                  ],
+          ),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: AppColors.streakAmber.withValues(alpha: available ? 0.35 : 0.15)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              available ? Icons.card_giftcard_rounded : Icons.check_circle_rounded,
+              color: AppColors.streakAmber,
+            ),
+            const SizedBox(height: 8),
+            Text('Сундук', style: text.titleSmall),
+            Text(
+              available ? 'Открой награду' : 'Открыт сегодня',
+              style: text.labelSmall?.copyWith(color: AppColors.streakAmber),
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _PetMiniCard extends StatelessWidget {
+  const _PetMiniCard({required this.pet});
+  final PetCompanion pet;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      onTap: () => context.push(AppRoutes.pet),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: semantic.surfaceRaised,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: semantic.border),
+        ),
+        child: Row(
+          children: <Widget>[
+            Text(pet.species.emoji, style: const TextStyle(fontSize: 32)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(pet.name, style: text.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    pet.stageLabel,
+                    style: text.labelSmall?.copyWith(color: semantic.textMuted),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: 250.ms).slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _DuelMiniCard extends StatelessWidget {
+  const _DuelMiniCard({required this.duel});
+  final Duel duel;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+    final bool wonUnclaimed = duel.won == true && !duel.isClaimed;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      onTap: () => context.push(AppRoutes.duel),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: semantic.surfaceRaised,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(
+            color: wonUnclaimed ? AppColors.success.withValues(alpha: 0.5) : semantic.border,
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.accentIndigo.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              child: const Icon(Icons.sports_kabaddi_rounded, color: AppColors.accentIndigo, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Дуэль против ${duel.opponentName}', style: text.titleSmall),
+                  Text(
+                    wonUnclaimed
+                        ? 'Победа! Забери награду'
+                        : '${duel.playerScore} / ${duel.targetScore} очков',
+                    style: text.bodySmall?.copyWith(
+                      color: wonUnclaimed ? AppColors.success : semantic.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (wonUnclaimed)
+              Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+              )
+            else
+              const Icon(Icons.chevron_right_rounded),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: 175.ms).slideY(begin: 0.05, end: 0);
   }
 }
 

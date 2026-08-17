@@ -13,6 +13,50 @@ class XpRewards {
   static const int achievementUnlocked = 25;
 }
 
+/// Streak-length XP multiplier: the longer the current streak, the more
+/// bonus XP every award earns. Kept as a step function (not a smooth
+/// curve) so it's easy to show the exact next threshold in the UI
+/// ("3 more days to reach x1.5").
+class StreakMultiplier {
+  const StreakMultiplier._();
+
+  /// (minimum streak length in days, multiplier applied to XP awards).
+  /// Checked from the end backwards, so longer streaks look up their
+  /// entry directly rather than falling through every earlier tier.
+  static const List<(int minDays, double multiplier)> _tiers = <(int, double)>[
+    (30, 2.0),
+    (14, 1.75),
+    (7, 1.5),
+    (3, 1.2),
+    (0, 1.0),
+  ];
+
+  static double forStreak(int streakDays) {
+    for (final (int minDays, double multiplier) in _tiers) {
+      if (streakDays >= minDays) return multiplier;
+    }
+    return 1.0;
+  }
+
+  /// Days still needed to reach the next-higher tier, or null if already
+  /// at the top tier. Used for "N days to x1.5" progress messaging.
+  static int? daysToNextTier(int streakDays) {
+    for (int i = _tiers.length - 1; i >= 0; i--) {
+      final int minDays = _tiers[i].$1;
+      if (streakDays < minDays) return minDays - streakDays;
+    }
+    return null;
+  }
+
+  static double? nextMultiplier(int streakDays) {
+    for (int i = _tiers.length - 1; i >= 0; i--) {
+      final int minDays = _tiers[i].$1;
+      if (streakDays < minDays) return _tiers[i].$2;
+    }
+    return null;
+  }
+}
+
 /// Level thresholds: cumulative XP required to REACH each level.
 /// Index 0 = Level 1 (0 XP). Generated with a smooth quadratic-ish curve
 /// so early levels feel fast and later levels feel earned.

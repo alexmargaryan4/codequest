@@ -3,7 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/rewards_constants.dart';
 import '../../../core/providers/core_providers.dart';
+import '../../../core/providers/cosmetics_provider.dart';
 import '../../../core/providers/progress_provider.dart';
 import '../../../core/providers/settings_provider.dart';
 import '../../../core/router/app_router.dart';
@@ -11,6 +13,7 @@ import '../../../core/storage/settings_store.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../models/achievement.dart';
+import '../../../models/cosmetics_state.dart';
 import '../../../models/course.dart';
 import '../../../models/user_progress.dart';
 import '../../../shared/widgets/stat_chip.dart';
@@ -48,6 +51,8 @@ class ProfileScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
               children: <Widget>[
                 _ProfileHeader(username: username, progress: progress),
+                const SizedBox(height: 20),
+                const _ExtrasRow(),
                 const SizedBox(height: 20),
                 XpProgressBar(level: progress.level, currentXp: currentXp, neededXp: neededXp),
                 const SizedBox(height: 20),
@@ -115,31 +120,43 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
+class _ProfileHeader extends ConsumerWidget {
   const _ProfileHeader({required this.username, required this.progress});
   final String username;
   final UserProgress progress;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme text = Theme.of(context).textTheme;
     final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+    final CosmeticsState? cosmetics = ref.watch(cosmeticsProvider).valueOrNull;
+    final CosmeticItem? equippedFrame = cosmetics?.equippedAvatarFrameId != null
+        ? CosmeticsCatalog.byId(cosmetics!.equippedAvatarFrameId!)
+        : null;
+    final Color? frameColor =
+        equippedFrame != null ? AppColors.fromHex(equippedFrame.colorHex) : null;
 
     return Row(
       children: <Widget>[
         Container(
           width: 72,
           height: 72,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: <Color>[AppColors.accentIndigoMuted, AppColors.accentIndigo],
+          padding: frameColor != null ? const EdgeInsets.all(3) : EdgeInsets.zero,
+          decoration: frameColor != null
+              ? BoxDecoration(shape: BoxShape.circle, border: Border.all(color: frameColor, width: 3))
+              : null,
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: <Color>[AppColors.accentIndigoMuted, AppColors.accentIndigo],
+              ),
             ),
-          ),
-          child: Center(
-            child: Text(
-              username.isNotEmpty ? username[0].toUpperCase() : '?',
-              style: text.headlineMedium?.copyWith(color: Colors.white),
+            child: Center(
+              child: Text(
+                username.isNotEmpty ? username[0].toUpperCase() : '?',
+                style: text.headlineMedium?.copyWith(color: Colors.white),
+              ),
             ),
           ),
         ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
@@ -161,6 +178,84 @@ class _ProfileHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ExtrasRow extends StatelessWidget {
+  const _ExtrasRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: _ExtraTile(
+            icon: Icons.diamond_rounded,
+            label: 'Скины',
+            color: AppColors.accentIndigo,
+            onTap: () => context.push(AppRoutes.cosmetics),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _ExtraTile(
+            icon: Icons.pets_rounded,
+            label: 'Питомец',
+            color: AppColors.success,
+            onTap: () => context.push(AppRoutes.pet),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _ExtraTile(
+            icon: Icons.insights_rounded,
+            label: 'Отчёт',
+            color: AppColors.streakAmber,
+            onTap: () => context.push(AppRoutes.weeklyReport),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ExtraTile extends StatelessWidget {
+  const _ExtraTile({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppSemanticColors semantic = Theme.of(context).extension<AppSemanticColors>()!;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: semantic.surfaceRaised,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(color: semantic.border),
+        ),
+        child: Column(
+          children: <Widget>[
+            Icon(icon, color: color, size: 22),
+            const SizedBox(height: 6),
+            Text(label, style: text.labelSmall),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -5,5 +5,5 @@
   there's no white flash before our animated SplashScreen takes over.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="#FF12141A" />
+    <item android:drawable="@color/launch_background_color" />
 </layer-list>

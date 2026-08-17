@@ -13,7 +13,7 @@ class AppDatabase {
   static final AppDatabase instance = AppDatabase._();
 
   static const String _dbName = 'codequest.db';
-  static const int _dbVersion = 2;
+  static const int _dbVersion = 3;
 
   Database? _db;
 
@@ -117,6 +117,7 @@ class AppDatabase {
     ''');
 
     await _createEconomyTables(db);
+    await _createV3Tables(db);
 
     // Seed the single user_progress row.
     await db.insert('user_progress', <String, Object?>{
@@ -130,6 +131,7 @@ class AppDatabase {
     });
 
     await _seedEconomyRows(db);
+    await _seedV3Rows(db);
   }
 
   /// Hearts / gems / weekly-quests tables, added in schema v2. Split into
@@ -186,10 +188,91 @@ class AppDatabase {
     });
   }
 
+  /// Daily chest / pet companion / duels / cosmetics tables, added in
+  /// schema v3. Split out identically to [_createEconomyTables] so both
+  /// a fresh install and an upgrade from any earlier version create
+  /// these the same way.
+  Future<void> _createV3Tables(Database db) async {
+    await db.execute('''
+      CREATE TABLE daily_chest (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        last_opened_date TEXT,
+        current_streak INTEGER NOT NULL DEFAULT 0
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE pet_state (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        species TEXT NOT NULL DEFAULT 'ferret',
+        xp_fed INTEGER NOT NULL DEFAULT 0,
+        name TEXT NOT NULL DEFAULT 'Байт',
+        last_fed_at TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE duel_history (
+        id TEXT PRIMARY KEY,
+        date_key TEXT NOT NULL,
+        opponent_name TEXT NOT NULL,
+        opponent_score INTEGER NOT NULL,
+        player_score INTEGER NOT NULL DEFAULT 0,
+        target_score INTEGER NOT NULL,
+        won INTEGER,
+        gems_reward INTEGER NOT NULL DEFAULT 0,
+        claimed_at TEXT,
+        created_at TEXT NOT NULL
+      )
+    ''');
+    await db.execute(
+      'CREATE INDEX idx_duel_history_date ON duel_history(date_key)',
+    );
+
+    await db.execute('''
+      CREATE TABLE owned_cosmetics (
+        cosmetic_id TEXT PRIMARY KEY,
+        purchased_at TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE equipped_cosmetics (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        avatar_frame_id TEXT,
+        app_icon_id TEXT
+      )
+    ''');
+  }
+
+  Future<void> _seedV3Rows(Database db) async {
+    await db.insert('daily_chest', <String, Object?>{
+      'id': 1,
+      'last_opened_date': null,
+      'current_streak': 0,
+    });
+    await db.insert('pet_state', <String, Object?>{
+      'id': 1,
+      'species': 'ferret',
+      'xp_fed': 0,
+      'name': 'Байт',
+      'last_fed_at': null,
+    });
+    await db.insert('equipped_cosmetics', <String, Object?>{
+      'id': 1,
+      'avatar_frame_id': null,
+      'app_icon_id': null,
+    });
+  }
+
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await _createEconomyTables(db);
       await _seedEconomyRows(db);
+    }
+    if (oldVersion < 3) {
+      await _createV3Tables(db);
+      await _seedV3Rows(db);
     }
   }
 

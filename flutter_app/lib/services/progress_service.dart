@@ -1,4 +1,4 @@
-import '../core/constants/xp_constants.dart';
+import '../core/constants/xp_constants.dart'; // includes StreakMultiplier
 import '../models/course.dart';
 import '../models/user_progress.dart';
 import '../repositories/course_repository.dart';
@@ -13,12 +13,30 @@ class XpAwardResult {
     required this.xpGained,
     required this.leveledUp,
     this.newLevel,
+    this.baseXp = 0,
   });
 
   final UserProgress progress;
+
+  /// The actual XP added to `totalXp`, after the streak multiplier.
   final int xpGained;
   final bool leveledUp;
   final int? newLevel;
+
+  /// The pre-multiplier XP amount, exposed so callers that also need to
+  /// feed the pet companion or duel score can choose whether to use the
+  /// boosted or base amount (both currently use [xpGained]).
+  final int baseXp;
+}
+
+/// Outcome of [ProgressService.completeLesson]/`completeMiniProject`,
+/// carrying the actual (post streak-multiplier) XP awarded alongside
+/// the updated progress — needed so callers that also feed the pet
+/// companion or duel score use the real amount, not a hardcoded guess.
+class CompletionResult {
+  const CompletionResult({required this.progress, required this.xpGained});
+  final UserProgress progress;
+  final int xpGained;
 }
 
 /// Encapsulates all XP / level / streak business rules on top of
@@ -51,17 +69,29 @@ class ProgressService {
     final int previousLevel = before.level;
 
     final UserProgress withStreak = await _applyDailyStreak(before);
-    final UserProgress updated = withStreak.copyWith(totalXp: withStreak.totalXp + xp);
+    final int multipliedXp = _applyStreakMultiplier(xp, withStreak.currentStreak);
+    final UserProgress updated =
+        withStreak.copyWith(totalXp: withStreak.totalXp + multipliedXp);
 
     await _repository.saveCore(updated);
 
     final int newLevel = updated.level;
     return XpAwardResult(
       progress: updated,
-      xpGained: xp,
+      xpGained: multipliedXp,
       leveledUp: newLevel > previousLevel,
       newLevel: newLevel > previousLevel ? newLevel : null,
+      baseXp: xp,
     );
+  }
+
+  /// Scales [baseXp] by the current streak's XP multiplier (see
+  /// [StreakMultiplier]), rounding to the nearest whole XP point.
+  int _applyStreakMultiplier(int baseXp, int streakDays) {
+    if (baseXp <= 0) return baseXp;
+    final double multiplier = StreakMultiplier.forStreak(streakDays);
+    if (multiplier == 1.0) return baseXp;
+    return (baseXp * multiplier).round();
   }
 
   /// Updates streak counters based on [lastActivityDate] vs today, without
@@ -125,7 +155,7 @@ class ProgressService {
     }
   }
 
-  Future<UserProgress> completeLesson({
+  Future<CompletionResult> completeLesson({
     required String lessonId,
     required String topicId,
     required String courseId,
@@ -143,13 +173,16 @@ class ProgressService {
     if (wasPerfect) xp += XpRewards.perfectLessonBonus;
 
     final UserProgress withStreak = await _applyDailyStreak(current);
+    final int multipliedXp = _applyStreakMultiplier(xp, withStreak.currentStreak);
     final UserProgress updated = withStreak.copyWith(
-      totalXp: withStreak.totalXp + xp,
+      totalXp: withStreak.totalXp + multipliedXp,
       lessonsCompleted: withStreak.lessonsCompleted + 1,
       completedLessonIds: <String>{...withStreak.completedLessonIds, lessonId},
     );
     await _repository.saveCore(updated);
-    return _maybeCompleteTopic(topicId: topicId, courseId: courseId, progress: updated);
+    final UserProgress finalProgress =
+        await _maybeCompleteTopic(topicId: topicId, courseId: courseId, progress: updated);
+    return CompletionResult(progress: finalProgress, xpGained: multipliedXp);
   }
 
   Future<UserProgress> completeTopic({required String topicId, required String courseId}) async {
@@ -162,7 +195,7 @@ class ProgressService {
     return updated;
   }
 
-  Future<UserProgress> completeMiniProject({
+  Future<CompletionResult> completeMiniProject({
     required String projectId,
     required String topicId,
     int xpReward = XpRewards.miniProjectComplete,
@@ -170,18 +203,20 @@ class ProgressService {
     await _repository.markProjectCompleted(projectId: projectId, topicId: topicId);
     final UserProgress current = await _repository.load();
     final UserProgress withStreak = await _applyDailyStreak(current);
+    final int multipliedXp = _applyStreakMultiplier(xpReward, withStreak.currentStreak);
     final UserProgress updated = withStreak.copyWith(
-      totalXp: withStreak.totalXp + xpReward,
+      totalXp: withStreak.totalXp + multipliedXp,
       projectsCompleted: withStreak.projectsCompleted + 1,
       completedProjectIds: <String>{...withStreak.completedProjectIds, projectId},
     );
     await _repository.saveCore(updated);
     final TopicNode? topic = await _findTopic(topicId);
-    return _maybeCompleteTopic(
+    final UserProgress finalProgress = await _maybeCompleteTopic(
       topicId: topicId,
       courseId: topic?.courseId ?? '',
       progress: updated,
     );
+    return CompletionResult(progress: finalProgress, xpGained: multipliedXp);
   }
 
   Future<void> recordExerciseAttempt({

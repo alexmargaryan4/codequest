@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/achievement.dart';
@@ -6,6 +8,8 @@ import '../../repositories/achievement_repository.dart';
 import '../../repositories/progress_repository.dart';
 import '../../services/progress_service.dart';
 import 'core_providers.dart';
+import 'duel_provider.dart';
+import 'pet_provider.dart';
 
 /// One-shot XP/level-up event the UI can listen to for celebratory
 /// animations, without that data living permanently in [UserProgress].
@@ -28,9 +32,11 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
     required ProgressService progressService,
     required AchievementRepository achievementRepository,
     required ProgressRepository progressRepository,
+    required Ref ref,
   })  : _progressService = progressService,
         _achievementRepository = achievementRepository,
         _progressRepository = progressRepository,
+        _ref = ref,
         super(const AsyncValue<UserProgress>.loading()) {
     _load();
   }
@@ -38,6 +44,7 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
   final ProgressService _progressService;
   final AchievementRepository _achievementRepository;
   final ProgressRepository _progressRepository;
+  final Ref _ref;
 
   /// Latest one-shot event (XP gain / level up / achievement unlock),
   /// exposed for UI listeners to consume and clear.
@@ -63,8 +70,8 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
       leveledUp: result.leveledUp,
       newLevel: result.newLevel,
     );
-    state = AsyncValue<UserProgress>.data(state.valueOrNull ?? result.progress);
     state = AsyncValue<UserProgress>.data(result.progress);
+    _onXpGained(result.xpGained);
   }
 
   Future<void> completeLesson({
@@ -73,19 +80,20 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
     required String courseId,
     required bool wasPerfect,
   }) async {
-    final UserProgress updated = await _progressService.completeLesson(
+    final CompletionResult result = await _progressService.completeLesson(
       lessonId: lessonId,
       topicId: topicId,
       courseId: courseId,
       wasPerfect: wasPerfect,
     );
-    final List<Achievement> unlocked = await _checkAchievements(updated);
+    final List<Achievement> unlocked = await _checkAchievements(result.progress);
     lastEvent = ProgressEvent(
-      xpGained: wasPerfect ? 45 : 30,
+      xpGained: result.xpGained,
       leveledUp: false,
       newlyUnlockedAchievements: unlocked,
     );
-    state = AsyncValue<UserProgress>.data(updated);
+    state = AsyncValue<UserProgress>.data(result.progress);
+    _onXpGained(result.xpGained);
   }
 
   Future<void> completeTopic({required String topicId, required String courseId}) async {
@@ -95,17 +103,18 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
   }
 
   Future<void> completeMiniProject({required String projectId, required String topicId}) async {
-    final UserProgress updated = await _progressService.completeMiniProject(
+    final CompletionResult result = await _progressService.completeMiniProject(
       projectId: projectId,
       topicId: topicId,
     );
-    final List<Achievement> unlocked = await _checkAchievements(updated);
+    final List<Achievement> unlocked = await _checkAchievements(result.progress);
     lastEvent = ProgressEvent(
-      xpGained: 100,
+      xpGained: result.xpGained,
       leveledUp: false,
       newlyUnlockedAchievements: unlocked,
     );
-    state = AsyncValue<UserProgress>.data(updated);
+    state = AsyncValue<UserProgress>.data(result.progress);
+    _onXpGained(result.xpGained);
   }
 
   Future<void> recordExerciseAttempt({
@@ -136,6 +145,17 @@ class UserProgressNotifier extends StateNotifier<AsyncValue<UserProgress>> {
     return newlyUnlocked;
   }
 
+  /// Fans an XP gain out to the pet companion (grows 1:1 with XP) and
+  /// today's duel (counts toward the score race), so every XP-awarding
+  /// action feeds both without each call site needing to remember to.
+  /// Fire-and-forget: both own their state independently via their own
+  /// providers, same pattern as gems/hearts refresh elsewhere.
+  void _onXpGained(int xp) {
+    if (xp <= 0) return;
+    unawaited(_ref.read(petProvider.notifier).feed(xp));
+    unawaited(_ref.read(duelProvider.notifier).addScore(xp));
+  }
+
   void clearEvent() {
     lastEvent = null;
   }
@@ -148,5 +168,6 @@ final StateNotifierProvider<UserProgressNotifier, AsyncValue<UserProgress>>
     progressService: ref.watch(progressServiceProvider),
     achievementRepository: ref.watch(achievementRepositoryProvider),
     progressRepository: ref.watch(progressRepositoryProvider),
+    ref: ref,
   );
 });
