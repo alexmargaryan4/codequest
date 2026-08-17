@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Native launch background — shown for the brief window between process
+  start and the first Flutter frame. Matches AppColors.darkBackground so
+  there's no white flash before our animated SplashScreen takes over.
+-->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
+    <item android:drawable="#FF12141A" />
 </layer-list>

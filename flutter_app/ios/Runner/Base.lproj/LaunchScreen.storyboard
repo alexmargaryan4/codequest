@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <device id="retina6_12" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17506"/>
@@ -20,16 +20,16 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k7-Ecw">
-                                <rect key="frame" x="146.66666666666666" y="396" width="100" height="60"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="YRO-k7-Ecw" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1x0-yr-KyE"/>
-                            <constraint firstItem="YRO-k7-Ecw" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Fh9-FT-cYy"/>
-                        </constraints>
+                        <subviews/>
+                        <!--
+                          Solid brand-dark background (AppColors.darkBackground, #12141A).
+                          No image here on purpose: this native screen is only visible for
+                          the brief window before the first Flutter frame, and our animated
+                          Dart SplashScreen takes over immediately after — an empty dark
+                          frame here avoids any pop/flash between the two.
+                        -->
+                        <color key="backgroundColor" red="0.0706" green="0.0784" blue="0.1020" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints/>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                     </view>
                 </viewController>
@@ -38,10 +38,5 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="LaunchImage" width="100" height="59"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
+    <resources/>
 </document>

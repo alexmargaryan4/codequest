@@ -14,13 +14,22 @@ import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/quests/presentation/weekly_quests_screen.dart';
 import '../../features/shop/presentation/shop_screen.dart';
+import '../../features/splash/presentation/splash_screen.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../providers/settings_provider.dart';
+
+/// Flips to `true` once the animated [SplashScreen]'s intro/hold/exit
+/// sequence has finished. The router's `redirect` waits on this in
+/// addition to [onboardingCompleteProvider] so the splash always plays
+/// out in full — even on a warm start where the onboarding-complete
+/// read resolves instantly — instead of being skipped or cut short.
+final StateProvider<bool> splashFinishedProvider = StateProvider<bool>((Ref ref) => false);
 
 /// Route path constants — kept centralized so features never hardcode
 /// path strings inline.
 class AppRoutes {
   const AppRoutes._();
+  static const String splash = '/splash';
   static const String onboarding = '/onboarding';
   static const String home = '/home';
   static const String learn = '/learn';
@@ -43,21 +52,41 @@ class AppRoutes {
 
 final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref ref) {
   return GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.splash,
     redirect: (BuildContext context, GoRouterState state) {
+      final bool goingToSplash = state.matchedLocation == AppRoutes.splash;
+
+      // The animated splash always gets to play out in full before any
+      // redirect fires — otherwise a fast cold start (onboarding flag
+      // already resolved) could redirect away mid-animation.
+      final bool splashFinished = ref.watch(splashFinishedProvider);
+      if (!splashFinished) return goingToSplash ? null : AppRoutes.splash;
+
       final AsyncValue<bool> onboardingComplete = ref.watch(onboardingCompleteProvider);
       // While the async preference read is in flight, don't redirect yet
       // — avoids a flash to /onboarding for returning users on cold start.
-      final bool? complete = onboardingComplete.valueOrNull;
+      // If the read fails outright (corrupted prefs, platform-channel
+      // error), fall back to `false` rather than stalling forever on a
+      // blank screen — worst case a returning user re-sees onboarding.
+      final bool? complete = onboardingComplete.hasError ? false : onboardingComplete.valueOrNull;
       if (complete == null) return null;
 
       final bool goingToOnboarding = state.matchedLocation == AppRoutes.onboarding;
+      if (goingToSplash) return complete ? AppRoutes.home : AppRoutes.onboarding;
       if (!complete && !goingToOnboarding) return AppRoutes.onboarding;
       if (complete && goingToOnboarding) return AppRoutes.home;
       return null;
     },
     refreshListenable: GoRouterRefreshStream(ref),
     routes: <RouteBase>[
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (BuildContext context, GoRouterState state) {
+          return SplashScreen(
+            onFinished: () => ref.read(splashFinishedProvider.notifier).state = true,
+          );
+        },
+      ),
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (BuildContext context, GoRouterState state) => const OnboardingScreen(),
@@ -129,23 +158,29 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref ref) {
   );
 });
 
-/// Bridges Riverpod's [onboardingCompleteProvider] into a [Listenable] so
-/// GoRouter re-evaluates its `redirect` callback the moment the async
-/// onboarding-complete flag finishes loading, instead of only on
-/// navigation events.
+/// Bridges Riverpod's [onboardingCompleteProvider] and
+/// [splashFinishedProvider] into a single [Listenable] so GoRouter
+/// re-evaluates its `redirect` callback the moment either resolves,
+/// instead of only on navigation events.
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Ref ref) {
-    _sub = ref.listen<AsyncValue<bool>>(
+    _onboardingSub = ref.listen<AsyncValue<bool>>(
       onboardingCompleteProvider,
       (AsyncValue<bool>? previous, AsyncValue<bool> next) => notifyListeners(),
     );
+    _splashSub = ref.listen<bool>(
+      splashFinishedProvider,
+      (bool? previous, bool next) => notifyListeners(),
+    );
   }
 
-  late final ProviderSubscription<AsyncValue<bool>> _sub;
+  late final ProviderSubscription<AsyncValue<bool>> _onboardingSub;
+  late final ProviderSubscription<bool> _splashSub;
 
   @override
   void dispose() {
-    _sub.close();
+    _onboardingSub.close();
+    _splashSub.close();
     super.dispose();
   }
 }
